@@ -12,7 +12,9 @@ public class InteractionObject : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         for (int i = 0; i < activatedObjects.Length; i++)
-            activatedObjects[i].gameObject.SetActive(false);
+            activatedObjects[i].gameObject.SetActive(isActivated);
+        for (int i = 0; i < unactivatedObjects.Length; i++)
+            unactivatedObjects[i].gameObject.SetActive(!isActivated);
     }
 
     public void toggleActivate() {

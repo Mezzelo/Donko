@@ -4073,6 +4073,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   stopNaNPropagation: 1
+  finalBlitToCameraTarget: 1
   antialiasingMode: 1
   temporalAntialiasing:
     jitterSpread: 0.75
@@ -4257,7 +4258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sunlight: {fileID: 1663252312}
-  rayStartOffset: {x: 0, y: -2, z: 0}
+  rayStartOffset: {x: 0, y: -1, z: 0}
   lightObjects: {fileID: 795536749}
   isLit: 1
 --- !u!114 &1700524759

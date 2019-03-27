@@ -22,6 +22,7 @@ public class DonkoController : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
+
         if (Mathf.Abs(rb.velocity.y) > 0.1f)
             isGrounded = false;
         // get the movement axes for the player

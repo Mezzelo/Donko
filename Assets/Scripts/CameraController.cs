@@ -7,18 +7,20 @@ public class CameraController : MonoBehaviour {
     public float turnSpeed = 4.0f;
     public Transform player;
     public Vector3 offset;
+
+    Vector3 internalOffset;
     
     // Use this for initialization
 	void Start ()
     {
-        offset = new Vector3(player.position.x, player.position.y + offset.y, player.position.z + offset.z);
+        internalOffset = new Vector3(player.position.x, player.position.y + offset.y, player.position.z + offset.z);
 	}
 	
 	// Update is called once per frame
 	void LateUpdate ()
     {
-        offset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * turnSpeed, Vector3.up) * offset;
-        transform.position = player.position + offset;
+        internalOffset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * turnSpeed, Vector3.up) * internalOffset;
+        transform.position = player.position + internalOffset;
         transform.LookAt(player.position);
 	}
 }
