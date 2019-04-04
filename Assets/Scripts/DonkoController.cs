@@ -9,20 +9,13 @@ public class DonkoController : MonoBehaviour {
     private Rigidbody rb;
     public bool isGrounded = true;
 
-	// Use this for initialization
-	void Start ()
-    {
+    // Use this for initialization
+    void Start() {
         rb = GetComponent<Rigidbody>();
-	}
-
-    private void OnCollisionStay(Collision collision)
-    {
-        isGrounded = true;
     }
-    // Update is called once per frame
-    void Update ()
-    {
 
+    // Update is called once per frame
+    void Update() {
         if (Mathf.Abs(rb.velocity.y) > 0.1f)
             isGrounded = false;
         // get the movement axes for the player
@@ -58,21 +51,23 @@ public class DonkoController : MonoBehaviour {
 
 
         // jump handler
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            rb.AddForce(new Vector3(0, jump ,0), ForceMode.Impulse);
-            isGrounded = false;
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true) {
+            rb.AddForce(new Vector3(0, jump, 0), ForceMode.Impulse);
         }
 
+        GroundCheck();
     }
 
-    void Interact()
-    {
-
-    }
-
-    void SearchInventory()
-    {
-
+    void GroundCheck() {
+        RaycastHit hit;
+        float distance = 2f;
+        Vector3 dir = new Vector3(0, -1);
+        Debug.DrawRay(transform.position, dir);
+        if (Physics.Raycast(transform.position, dir, out hit, distance)) {
+            isGrounded = true;
+        }
+        else {
+            isGrounded = false;
+        }
     }
 }
