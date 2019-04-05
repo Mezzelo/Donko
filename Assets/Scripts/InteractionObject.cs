@@ -5,6 +5,7 @@ using UnityEngine;
 public class InteractionObject : MonoBehaviour
 {
     public float interactionRadius = 4f;
+    public int flickerType = 0;
     public bool isActivated = false;
 
     public Transform[] unactivatedObjects;

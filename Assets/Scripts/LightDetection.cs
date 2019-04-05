@@ -31,10 +31,13 @@ public class LightDetection : MonoBehaviour
         }
         if (!isLit) {
             for (int i = 0; i < lightObjects.childCount && !isLit; i++) {
-                if (lightObjects.GetChild(i).GetComponent<LightObject>().isActive &&
+                if (lightObjects.GetChild(i).gameObject.activeInHierarchy &&
+                    lightObjects.GetChild(i).GetComponent<LightObject>().isActive &&
                     (lightObjects.GetChild(i).transform.position - transform.position).magnitude <
-                    lightObjects.GetChild(i).GetComponent<LightObject>().lightRadius)
+                    lightObjects.GetChild(i).GetComponent<LightObject>().lightRadius) {
                     isLit = true;
+                    // Debug.Log(lightObjects.GetChild(i).name);
+                }
             }
         }
     }

@@ -16,9 +16,15 @@ public class DonkoInteraction : MonoBehaviour
     void Update() {
         if (Input.GetKeyDown(KeyCode.E)) {
             for (int i = 0; i < interactionObjects.childCount; i++) {
+                InteractionObject interComponent = interactionObjects.GetChild(i).GetComponent<InteractionObject>();
                 if ((this.transform.position - interactionObjects.GetChild(i).position).magnitude <
-                     interactionObjects.GetChild(i).GetComponent<InteractionObject>().interactionRadius) {
-                    interactionObjects.GetChild(i).GetComponent<InteractionObject>().toggleActivate();
+                     interComponent.interactionRadius) {
+                    if (this.GetComponent<DonkoInventory>().flickers[interComponent.flickerType] > 0 && !interComponent.isActivated ||
+                        interComponent.isActivated) {
+                        this.GetComponent<DonkoInventory>().changeFlickerCount(interComponent.flickerType,
+                            (interComponent.isActivated ? 1 : -1));
+                        interComponent.toggleActivate();
+                    }
                 }
             }
         }
