@@ -26,6 +26,7 @@ public class LightMeter : MonoBehaviour
                 this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                 currentLight = 0f;
                 this.GetComponent<DonkoController>().speed = 0f;
+                this.GetComponent<DonkoController>().doDeath();
                 this.GetComponent<DonkoController>().enabled = false;
             }
         }
@@ -33,6 +34,7 @@ public class LightMeter : MonoBehaviour
             currentLight = Mathf.Min(currentLight + Time.fixedDeltaTime, maxLight);
             this.GetComponent<DonkoController>().speed = movespeedLit;
             this.GetComponent<DonkoController>().jump = 7f;
+
         }
         uiCanvas.Find("BarContainer").Find("BarFill").localScale = new Vector3(MezzMath.fullSine(currentLight / maxLight), 1f, 1f);
         uiCanvas.Find("BarContainer").Find("BarFill").localPosition = new Vector3(125f * MezzMath.fullSine(currentLight / maxLight) - 125f, 0f, 0f);

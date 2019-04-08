@@ -9,9 +9,24 @@ public class DonkoController : MonoBehaviour {
     private Rigidbody rb;
     public bool isGrounded = true;
 
+    public Animator donkoAnims;
+
+    public void doDeath() {
+        donkoAnims.SetTrigger("didDie");
+    }
+
+    Vector3 posLastTick;
+    float donkoVeloc;
+
     // Use this for initialization
     void Start() {
         rb = GetComponent<Rigidbody>();
+        posLastTick = transform.position;
+    }
+
+    private void FixedUpdate() {
+        donkoVeloc = (transform.position - posLastTick).magnitude;
+        posLastTick = transform.position;
     }
 
     // Update is called once per frame
@@ -39,9 +54,19 @@ public class DonkoController : MonoBehaviour {
         var desiredMoveDirection = forward * vertical + right * horizontal;
 
         // the actual movement
-        if (desiredMoveDirection != Vector3.zero)
+        if (desiredMoveDirection != Vector3.zero) {
             transform.GetChild(0).forward = desiredMoveDirection.normalized;
-        transform.Translate(desiredMoveDirection * speed * Time.deltaTime);
+            transform.Translate(desiredMoveDirection * speed * Time.deltaTime);
+            donkoAnims.SetBool("isMoving", true);
+            donkoAnims.SetFloat("walkForwards", vertical);
+            donkoAnims.SetFloat("walkSide", horizontal);
+            donkoAnims.SetFloat("doIdle", 0f);
+            // donkoAnims.speed = donkoVeloc / 0.05f;
+        } else {
+            donkoAnims.SetBool("isMoving", false);
+            donkoAnims.SetFloat("doIdle", Mathf.Repeat(donkoAnims.GetFloat("doIdle") + Time.deltaTime, 12f));
+            // donkoAnims.speed = 1f;
+        }
 
         // This will keep Donko from toppling over
         // Quaternion rot = rb.rotation;
@@ -53,6 +78,10 @@ public class DonkoController : MonoBehaviour {
         // jump handler
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true) {
             rb.AddForce(new Vector3(0, jump, 0), ForceMode.Impulse);
+            isGrounded = false;
+            donkoAnims.SetTrigger("didJump");
+            donkoAnims.SetFloat("doIdle", 0f);
+            // donkoAnims.speed = 1f;
         }
 
         GroundCheck();
@@ -61,13 +90,17 @@ public class DonkoController : MonoBehaviour {
     void GroundCheck() {
         RaycastHit hit;
         float distance = 2f;
-        Vector3 dir = new Vector3(0, -1);
+        Vector3 dir = new Vector3(0, -0.45f);
         Debug.DrawRay(transform.position, dir);
         if (Physics.Raycast(transform.position, dir, out hit, distance)) {
             isGrounded = true;
+            // donkoAnims.SetBool("isJumping", false);
+            donkoAnims.SetBool("isFalling", false);
         }
         else {
             isGrounded = false;
+            donkoAnims.SetBool("isFalling", true);
+            // donkoAnims.speed = 1f;
         }
     }
 }

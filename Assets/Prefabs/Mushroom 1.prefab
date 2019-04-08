@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2088714941467108643
 Transform:
@@ -60,7 +60,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1267793633054558585
 Transform:
@@ -125,6 +125,7 @@ GameObject:
   - component: {fileID: 9018735218928653349}
   - component: {fileID: 9018735218931553285}
   - component: {fileID: 9018735218930554565}
+  - component: {fileID: 7465894222756367840}
   - component: {fileID: 4003318697863073456}
   - component: {fileID: 2131186867309153126}
   m_Layer: 10
@@ -132,7 +133,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &9018735218928653349
 Transform:
@@ -195,6 +196,25 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &7465894222756367840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9018735218928617477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836c87643c4fd4c43912dd096f3f2119, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animTime: 1
+  lightComponent: {fileID: 8812469418168551975}
+  posOffsetDeactivated: {x: 0, y: -2, z: 0}
+  rotOffsetDeactivated: {x: 0, y: -60, z: 0}
+  scaleDeactivated: {x: 0.15, y: 0.1, z: 0.15}
+  intensityOffset: 5
+  debug: 0
 --- !u!114 &4003318697863073456
 MonoBehaviour:
   m_ObjectHideFlags: 0

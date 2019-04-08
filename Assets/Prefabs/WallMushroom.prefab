@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5463249353587409507
 Transform:
@@ -84,7 +84,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &3908946619099052670
 Transform:
@@ -126,13 +126,14 @@ GameObject:
   - component: {fileID: 8877019125471229781}
   - component: {fileID: 8877019125472228757}
   - component: {fileID: 7265568092456701921}
+  - component: {fileID: 1808143065746210727}
   - component: {fileID: 7546588251278119462}
   m_Layer: 10
   m_Name: WallMushroom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &8877019125474129781
 Transform:
@@ -210,6 +211,25 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.5482656, y: 0.9279824, z: 0.57501334}
   m_Center: {x: 0.57683444, y: -0.015610605, z: 0.011906919}
+--- !u!114 &1808143065746210727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8877019125474159445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836c87643c4fd4c43912dd096f3f2119, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animTime: 1
+  lightComponent: {fileID: 1449748159850287083}
+  posOffsetDeactivated: {x: 0.8, y: -0.3, z: 0}
+  rotOffsetDeactivated: {x: 0, y: -60, z: 55}
+  scaleDeactivated: {x: 0.14, y: 0.331, z: 0.166}
+  intensityOffset: 15
+  debug: 0
 --- !u!114 &7546588251278119462
 MonoBehaviour:
   m_ObjectHideFlags: 0

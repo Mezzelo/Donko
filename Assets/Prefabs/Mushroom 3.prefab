@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5296336305994735610
 Transform:
@@ -56,6 +56,7 @@ GameObject:
   - component: {fileID: 6306480255379638035}
   - component: {fileID: 6306480255378868019}
   - component: {fileID: 6306480255377737203}
+  - component: {fileID: 9115830087075156203}
   - component: {fileID: 2099592915136929158}
   - component: {fileID: 3980789196860659792}
   m_Layer: 10
@@ -63,7 +64,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &6306480255379638035
 Transform:
@@ -126,6 +127,25 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &9115830087075156203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6306480255379741491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836c87643c4fd4c43912dd096f3f2119, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animTime: 1
+  lightComponent: {fileID: 5828163393399888145}
+  posOffsetDeactivated: {x: 0, y: -2, z: 0}
+  rotOffsetDeactivated: {x: 0, y: -60, z: 0}
+  scaleDeactivated: {x: 0.15, y: 0.1, z: 0.15}
+  intensityOffset: 5
+  debug: 0
 --- !u!114 &2099592915136929158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,7 +190,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4266595581203257935
 Transform:
