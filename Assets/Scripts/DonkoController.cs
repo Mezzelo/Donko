@@ -9,9 +9,17 @@ public class DonkoController : MonoBehaviour {
     private Rigidbody rb;
     public bool isGrounded = true;
 
+    public float airspeedMult = 0.55f;
+    float airspeedCurrent = 1f;
+
     public Animator donkoAnims;
 
+    public float jumpCooldownMax = 0.4f;
+
+    float jumpCooldownC = 0f;
+
     public void doDeath() {
+        transform.GetChild(1).GetComponent<MeshCollider>().enabled = true;
         donkoAnims.SetTrigger("didDie");
     }
 
@@ -51,7 +59,15 @@ public class DonkoController : MonoBehaviour {
         right.Normalize();
 
         // the direction the player moves
-        var desiredMoveDirection = forward * vertical + right * horizontal;
+        if (!isGrounded) {
+            if (airspeedCurrent > airspeedMult)
+                airspeedCurrent = Mathf.Max(airspeedCurrent - Time.deltaTime * 1.5f, airspeedMult);
+        } else {
+            if (airspeedCurrent < 1f)
+                airspeedCurrent = Mathf.Min(airspeedCurrent + Time.deltaTime * 1.5f, 1f);
+        }
+
+        var desiredMoveDirection = (forward * vertical + right * horizontal) * airspeedCurrent;
 
         // the actual movement
         if (desiredMoveDirection != Vector3.zero) {
@@ -76,23 +92,25 @@ public class DonkoController : MonoBehaviour {
 
 
         // jump handler
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true) {
+        GroundCheck();
+        if (jumpCooldownC > 0f)
+            jumpCooldownC = Mathf.Max(0f, jumpCooldownC - Time.deltaTime);
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true && jumpCooldownC <= 0f) {
             rb.AddForce(new Vector3(0, jump, 0), ForceMode.Impulse);
             isGrounded = false;
             donkoAnims.SetTrigger("didJump");
             donkoAnims.SetFloat("doIdle", 0f);
+            jumpCooldownC = jumpCooldownMax;
             // donkoAnims.speed = 1f;
         }
-
-        GroundCheck();
     }
 
     void GroundCheck() {
         RaycastHit hit;
-        float distance = 2f;
-        Vector3 dir = new Vector3(0, -0.45f);
-        Debug.DrawRay(transform.position, dir);
-        if (Physics.Raycast(transform.position, dir, out hit, distance)) {
+        float distance = 1.35f;
+        Vector3 dir = new Vector3(0, -distance);
+        Debug.DrawRay(transform.position + transform.GetChild(0).forward * -0.35f, dir);
+        if (Physics.Raycast(transform.position + transform.GetChild(0).forward * -0.35f, dir, out hit, distance)) {
             isGrounded = true;
             // donkoAnims.SetBool("isJumping", false);
             donkoAnims.SetBool("isFalling", false);

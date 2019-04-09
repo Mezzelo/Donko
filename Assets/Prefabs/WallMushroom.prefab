@@ -126,8 +126,8 @@ GameObject:
   - component: {fileID: 8877019125471229781}
   - component: {fileID: 8877019125472228757}
   - component: {fileID: 7265568092456701921}
-  - component: {fileID: 1808143065746210727}
   - component: {fileID: 7546588251278119462}
+  - component: {fileID: 1935132099}
   m_Layer: 10
   m_Name: WallMushroom
   m_TagString: Untagged
@@ -144,7 +144,7 @@ Transform:
   m_GameObject: {fileID: 8877019125474159445}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 30.240744, y: 6.4449034, z: 20.3}
-  m_LocalScale: {x: 0.570984, y: 1.3496283, z: 0.67735857}
+  m_LocalScale: {x: 0.67232996, y: 1.58919, z: 0.79758996}
   m_Children:
   - {fileID: 3908946619099052670}
   - {fileID: 5463249353587409507}
@@ -211,25 +211,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.5482656, y: 0.9279824, z: 0.57501334}
   m_Center: {x: 0.57683444, y: -0.015610605, z: 0.011906919}
---- !u!114 &1808143065746210727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8877019125474159445}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 836c87643c4fd4c43912dd096f3f2119, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animTime: 1
-  lightComponent: {fileID: 1449748159850287083}
-  posOffsetDeactivated: {x: 0.8, y: -0.3, z: 0}
-  rotOffsetDeactivated: {x: 0, y: -60, z: 55}
-  scaleDeactivated: {x: 0.14, y: 0.331, z: 0.166}
-  intensityOffset: 15
-  debug: 0
 --- !u!114 &7546588251278119462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,4 +225,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canBeToggled: 0
   isActive: 1
-  lightRadius: 3
+  lightRadius: 5
+--- !u!114 &1935132099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8877019125474159445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836c87643c4fd4c43912dd096f3f2119, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animTime: 1
+  lightComponent: {fileID: 1449748159850287083}
+  posOffsetDeactivated: {x: 1, y: 0.3, z: 0}
+  rotOffsetDeactivated: {x: 0, y: 0, z: 53}
+  scaleDeactivated: {x: 0.15, y: 0.4, z: 0.15}
+  intensityOffset: -15
+  debug: 0

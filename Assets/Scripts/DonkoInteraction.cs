@@ -21,9 +21,12 @@ public class DonkoInteraction : MonoBehaviour
                      interComponent.interactionRadius) {
                     if (this.GetComponent<DonkoInventory>().flickers[interComponent.flickerType] > 0 && !interComponent.isActivated ||
                         interComponent.isActivated) {
-                        this.GetComponent<DonkoInventory>().changeFlickerCount(interComponent.flickerType,
-                            (interComponent.isActivated ? 1 : -1));
-                        interComponent.toggleActivate();
+                        bool didActivate = interComponent.toggleActivate();
+                        if (didActivate) {
+                            this.GetComponent<DonkoInventory>().changeFlickerCount(interComponent.flickerType,
+                                (interComponent.isActivated ? -1 : 1));
+                            break;
+                        }
                     }
                 }
             }

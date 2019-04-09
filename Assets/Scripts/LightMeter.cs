@@ -11,15 +11,19 @@ public class LightMeter : MonoBehaviour
     public float movespeedUnlit = 1f;
 
     float currentLight = 1f;
+    float maxIntensity = 2f;
     // Start is called before the first frame update
     void Start() {
         currentLight = maxLight;
+        maxIntensity = this.GetComponent<LightDetection>().sunlight.GetComponent<Light>().intensity;
     }
 
     // Update is called once per frame
     void FixedUpdate() {
         if (!this.GetComponent<LightDetection>().isLit && currentLight > 0f) {
-            currentLight -= Time.fixedDeltaTime;
+            currentLight = Mathf.Max(currentLight - Time.fixedDeltaTime, 0f);
+            this.GetComponent<LightDetection>().sunlight.GetComponent<Light>().intensity =
+                maxIntensity * currentLight / maxLight;
             this.GetComponent<DonkoController>().speed = movespeedUnlit;
             this.GetComponent<DonkoController>().jump = 0f;
             if (currentLight <= 0f) {
@@ -32,9 +36,10 @@ public class LightMeter : MonoBehaviour
         }
         else if (this.GetComponent<LightDetection>().isLit && currentLight > 0f) {
             currentLight = Mathf.Min(currentLight + Time.fixedDeltaTime, maxLight);
+            this.GetComponent<LightDetection>().sunlight.GetComponent<Light>().intensity =
+                maxIntensity * currentLight / maxLight;
             this.GetComponent<DonkoController>().speed = movespeedLit;
             this.GetComponent<DonkoController>().jump = 7f;
-
         }
         uiCanvas.Find("BarContainer").Find("BarFill").localScale = new Vector3(MezzMath.fullSine(currentLight / maxLight), 1f, 1f);
         uiCanvas.Find("BarContainer").Find("BarFill").localPosition = new Vector3(125f * MezzMath.fullSine(currentLight / maxLight) - 125f, 0f, 0f);

@@ -87,8 +87,8 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 0, g: 1, b: 0.979465, a: 1}
-  m_Intensity: 15
-  m_Range: 5.3874245
+  m_Intensity: 100
+  m_Range: 9.983658
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -102,7 +102,7 @@ Light:
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -125,8 +125,8 @@ GameObject:
   - component: {fileID: 9018735218928653349}
   - component: {fileID: 9018735218931553285}
   - component: {fileID: 9018735218930554565}
-  - component: {fileID: 7465894222756367840}
   - component: {fileID: 4003318697863073456}
+  - component: {fileID: 4369994013748726102}
   - component: {fileID: 2131186867309153126}
   m_Layer: 10
   m_Name: Mushroom 1
@@ -196,25 +196,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &7465894222756367840
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9018735218928617477}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 836c87643c4fd4c43912dd096f3f2119, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animTime: 1
-  lightComponent: {fileID: 8812469418168551975}
-  posOffsetDeactivated: {x: 0, y: -2, z: 0}
-  rotOffsetDeactivated: {x: 0, y: -60, z: 0}
-  scaleDeactivated: {x: 0.15, y: 0.1, z: 0.15}
-  intensityOffset: 5
-  debug: 0
 --- !u!114 &4003318697863073456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,7 +210,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canBeToggled: 0
   isActive: 1
-  lightRadius: 4
+  lightRadius: 5.5
+--- !u!114 &4369994013748726102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9018735218928617477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836c87643c4fd4c43912dd096f3f2119, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animTime: 1
+  lightComponent: {fileID: 8812469418168551975}
+  posOffsetDeactivated: {x: 0, y: -2, z: 0}
+  rotOffsetDeactivated: {x: 0, y: 120, z: 0}
+  scaleDeactivated: {x: 0.2, y: 0.15, z: 0.2}
+  intensityOffset: 100
+  debug: 0
 --- !u!136 &2131186867309153126
 CapsuleCollider:
   m_ObjectHideFlags: 0

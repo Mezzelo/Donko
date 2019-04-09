@@ -35,7 +35,7 @@ public class ToggleGrow : ToggleBase
             }
             if (mode == 1) {
                 animC = 0.01f;
-                Debug.Log("tween off");
+                // Debug.Log("tween off");
             }
         }
     }
@@ -61,7 +61,7 @@ public class ToggleGrow : ToggleBase
                 origRot, MezzMath.fullSine(animC / animTime)));
             transform.localScale = Vector3.Lerp(scaleDeactivated, origScale, MezzMath.fullSine(animC / animTime));
             if (lightComponent != null)
-                lightComponent.intensity = Mathf.Lerp(intensityOrig - intensityOffset, intensityOrig, MezzMath.fullSine(animC / animTime));
+                lightComponent.intensity = Mathf.Lerp(intensityOrig + intensityOffset, intensityOrig, MezzMath.fullSine(animC / animTime));
         }
         else if (animC > 0f && !isActivated) {
             animC = Mathf.Max(animC - Time.deltaTime, 0f);
@@ -70,7 +70,7 @@ public class ToggleGrow : ToggleBase
                 origRot, MezzMath.fullSine(animC / animTime)));
             transform.localScale = Vector3.Lerp(scaleDeactivated, origScale, MezzMath.fullSine(animC / animTime));
             if (lightComponent != null)
-                lightComponent.intensity = Mathf.Lerp(intensityOrig - intensityOffset, intensityOrig, MezzMath.fullSine(animC / animTime));
+                lightComponent.intensity = Mathf.Lerp(intensityOrig + intensityOffset, intensityOrig, MezzMath.fullSine(animC / animTime));
         }
     }
 }
