@@ -23,15 +23,18 @@ public class ToggleGrow : ToggleBase
     public override void toggleActivation(int mode) {
         base.toggleActivation(mode);
         if (isActivated) {
-            if (gameObject.GetComponent<AudioSource>() != null) {
-
+            if (gameObject.GetComponent<AudioSource>() != null && mode == 0) {
+                gameObject.GetComponent<AudioSource>().Play();
             }
             if (mode == 1) {
                 animC = animTime - 0.01f;
             }
         } else {
-            if (gameObject.GetComponent<AudioSource>() != null) {
-
+            if (gameObject.GetComponent<AudioSource>() != null && mode == 0) {
+                if (gameObject.GetComponents<AudioSource>().Length > 1)
+                    gameObject.GetComponents<AudioSource>()[1].Play();
+                else
+                    gameObject.GetComponent<AudioSource>().Play();
             }
             if (mode == 1) {
                 animC = 0.01f;

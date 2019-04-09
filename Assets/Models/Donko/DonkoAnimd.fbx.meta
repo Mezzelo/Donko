@@ -35,6 +35,8 @@ ModelImporter:
     100058: SpineHead
     100060: SpineMid
     100062: SpineUpper
+    100064: Armature.000
+    100066: Mushroom 2.001
     400000: Arm_L
     400002: Arm_L_end
     400004: Arm_R
@@ -67,10 +69,18 @@ ModelImporter:
     400058: SpineHead
     400060: SpineMid
     400062: SpineUpper
+    400064: Armature.000
+    400066: Mushroom 2.001
     2100000: Material.004
     2100002: Material.002
     2100004: Material.003
+    2100006: Material.001
+    2100008: Material.000
+    2100010: Material.005
+    2300000: Mushroom 2
+    3300000: Mushroom 2
     4300000: Mushroom 2
+    4300002: Mushroom 2.001
     7400000: Armature.002|Idle
     7400002: Armature.002|Jump
     7400004: Armature.002|Look
@@ -81,8 +91,19 @@ ModelImporter:
     7400014: Armature.002|Fall
     7400016: Armature.002|Fall
     7400018: Armature.002|FallNoStart
+    7400020: Armature.000|Fall
+    7400022: Armature.000|Idle
+    7400024: Armature.000|Jump
+    7400026: Armature.000|Look
+    7400028: Armature.000|Walking
+    7400030: Armature.000|WalkingBackwards
+    7400032: Armature.000|WalkingLeft
+    7400034: Armature.000|WalkingRight
+    7400036: Armature.000|FallNoStart
     9500000: //RootNode
     13700000: Mushroom 2
+    13700002: Mushroom 2.001
+    2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -112,8 +133,8 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature.002|Fall
-      takeName: Armature.002|Fall
+      name: Armature.000|Fall
+      takeName: Armature.000|Fall
       firstFrame: 0
       lastFrame: 49
       wrapMode: 0
@@ -140,8 +161,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature.002|Idle
-      takeName: Armature.002|Idle
+      name: Armature.000|Idle
+      takeName: Armature.000|Idle
       firstFrame: 0
       lastFrame: 80
       wrapMode: 0
@@ -168,8 +189,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature.002|Jump
-      takeName: Armature.002|Jump
+      name: Armature.000|Jump
+      takeName: Armature.000|Jump
       firstFrame: 0
       lastFrame: 70
       wrapMode: 0
@@ -196,8 +217,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature.002|Look
-      takeName: Armature.002|Look
+      name: Armature.000|Look
+      takeName: Armature.000|Look
       firstFrame: 0
       lastFrame: 180
       wrapMode: 0
@@ -224,8 +245,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature.002|Walking
-      takeName: Armature.002|Walking
+      name: Armature.000|Walking
+      takeName: Armature.000|Walking
       firstFrame: 0
       lastFrame: 80
       wrapMode: 0
@@ -252,8 +273,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature.002|WalkingBackwards
-      takeName: Armature.002|WalkingBackwards
+      name: Armature.000|WalkingBackwards
+      takeName: Armature.000|WalkingBackwards
       firstFrame: 0
       lastFrame: 80
       wrapMode: 0
@@ -280,8 +301,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature.002|WalkingLeft
-      takeName: Armature.002|WalkingLeft
+      name: Armature.000|WalkingLeft
+      takeName: Armature.000|WalkingLeft
       firstFrame: 0
       lastFrame: 60
       wrapMode: 0
@@ -308,8 +329,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature.002|WalkingRight
-      takeName: Armature.002|WalkingRight
+      name: Armature.000|WalkingRight
+      takeName: Armature.000|WalkingRight
       firstFrame: 0
       lastFrame: 60
       wrapMode: 0
@@ -336,8 +357,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature.002|FallNoStart
-      takeName: Armature.002|FallNoStart
+      name: Armature.000|FallNoStart
+      takeName: Armature.000|FallNoStart
       firstFrame: 0
       lastFrame: 1
       wrapMode: 0

@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 6d3f118db04490f4fbefe1774d020094
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: BlowBrush
+  fontNames:
+  - BlowBrush
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 368d0a89570c8e04b92c553dae8d63d4, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

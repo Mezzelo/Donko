@@ -34,23 +34,25 @@ public class CameraController : MonoBehaviour {
     // Update is called once per frame
     void LateUpdate() {
         // Debug.Log(currY);
-        float offY = Input.GetAxis("Mouse Y");
-        if (currY > minY && currY + Input.GetAxis("Mouse Y") < minY) {
-            offY = minY - currY;
-            currY = minY;
+        if (Time.timeScale > 0f) {
+            float offY = Input.GetAxis("Mouse Y");
+            if (currY > minY && currY + Input.GetAxis("Mouse Y") < minY) {
+                offY = minY - currY;
+                currY = minY;
+            }
+            else if (currY < maxY && currY + Input.GetAxis("Mouse Y") > maxY) {
+                offY = maxY - currY;
+                currY = maxY;
+            }
+            else if (currY + Input.GetAxis("Mouse Y") < maxY && currY + Input.GetAxis("Mouse Y") > minY) {
+                currY = currY + offY;
+            }
+            else {
+                offY = 0f;
+            }
+            offsetX = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * turnSpeed, Vector3.up) * offsetX;
+            offsetY = Quaternion.AngleAxis(offY * turnSpeed, Vector3.right) * offsetY;
         }
-        else if (currY < maxY && currY + Input.GetAxis("Mouse Y") > maxY) {
-            offY = maxY - currY;
-            currY = maxY;
-        } else if (currY + Input.GetAxis("Mouse Y") < maxY && currY + Input.GetAxis("Mouse Y") > minY)
-        {
-            currY = currY + offY;
-        }
-        else {
-            offY = 0f;
-        }
-        offsetX = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * turnSpeed, Vector3.up) * offsetX;
-        offsetY = Quaternion.AngleAxis(offY * turnSpeed, Vector3.right) * offsetY;
         transform.position = player.position - new Vector3(0, 0, distance) + offsetX + offsetY;
         // CameraClose();
         transform.LookAt(player.position);

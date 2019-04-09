@@ -7,9 +7,11 @@ public class InteractionObject : MonoBehaviour
     public float interactionRadius = 4f;
     public int flickerType = 0;
     public bool isActivated = false;
+    public bool singleUse = false;
 
     float interactionCooldown = 0f;
     int interactionIndex = 0;
+    bool used = false;
 
     public Transform[] unactivatedObjects;
     public Transform[] activatedObjects;
@@ -68,11 +70,17 @@ public class InteractionObject : MonoBehaviour
 
     public bool toggleActivate() {
         bool success = false;
-        if (interactionCooldown <= 0f) {
+        if (interactionCooldown <= 0f && !used) {
             success = true;
             isActivated = !isActivated;
             interactionIndex = Mathf.Max((unactivatedObjects.Length), (activatedObjects.Length));
             interactionCooldown = Mathf.Max(0.15f * (unactivatedObjects.Length), 0.15f * (activatedObjects.Length)) + 0.8f;
+
+            if (singleUse)
+                used = true;
+
+            if (gameObject.GetComponent<AudioSource>() != null)
+                gameObject.GetComponent<AudioSource>().Play();
             /*
             for (int i = 0; i < unactivatedObjects.Length; i++) {
                 if (unactivatedObjects[i].GetComponent<ToggleBase>() != null) {

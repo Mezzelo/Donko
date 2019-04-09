@@ -21,6 +21,7 @@ public class DonkoController : MonoBehaviour {
     public void doDeath() {
         transform.GetChild(1).GetComponent<MeshCollider>().enabled = true;
         donkoAnims.SetTrigger("didDie");
+        gameObject.GetComponent<AudioSource>().Stop();
     }
 
     Vector3 posLastTick;
@@ -30,6 +31,7 @@ public class DonkoController : MonoBehaviour {
     void Start() {
         rb = GetComponent<Rigidbody>();
         posLastTick = transform.position;
+        gameObject.GetComponent<AudioSource>().Play();
     }
 
     private void FixedUpdate() {
@@ -61,26 +63,31 @@ public class DonkoController : MonoBehaviour {
         // the direction the player moves
         if (!isGrounded) {
             if (airspeedCurrent > airspeedMult)
-                airspeedCurrent = Mathf.Max(airspeedCurrent - Time.deltaTime * 1.5f, airspeedMult);
+                airspeedCurrent = Mathf.Max(airspeedCurrent - Time.deltaTime * 0.5f, airspeedMult);
         } else {
             if (airspeedCurrent < 1f)
-                airspeedCurrent = Mathf.Min(airspeedCurrent + Time.deltaTime * 1.5f, 1f);
+                airspeedCurrent = Mathf.Min(airspeedCurrent + Time.deltaTime * 0.5f, 1f);
         }
 
         var desiredMoveDirection = (forward * vertical + right * horizontal) * airspeedCurrent;
 
         // the actual movement
-        if (desiredMoveDirection != Vector3.zero) {
+        if (desiredMoveDirection != Vector3.zero && Time.timeScale > 0f) {
             transform.GetChild(0).forward = desiredMoveDirection.normalized;
             transform.Translate(desiredMoveDirection * speed * Time.deltaTime);
             donkoAnims.SetBool("isMoving", true);
             donkoAnims.SetFloat("walkForwards", vertical);
             donkoAnims.SetFloat("walkSide", horizontal);
             donkoAnims.SetFloat("doIdle", 0f);
+            if (isGrounded)
+                gameObject.GetComponent<AudioSource>().volume = Mathf.Max(-0.8f + airspeedCurrent, 0f);
+            else
+                gameObject.GetComponent<AudioSource>().volume = Mathf.Max(-0.8f + airspeedCurrent, 0f);
             // donkoAnims.speed = donkoVeloc / 0.05f;
         } else {
             donkoAnims.SetBool("isMoving", false);
             donkoAnims.SetFloat("doIdle", Mathf.Repeat(donkoAnims.GetFloat("doIdle") + Time.deltaTime, 12f));
+            gameObject.GetComponent<AudioSource>().volume = 0f;
             // donkoAnims.speed = 1f;
         }
 
@@ -95,7 +102,7 @@ public class DonkoController : MonoBehaviour {
         GroundCheck();
         if (jumpCooldownC > 0f)
             jumpCooldownC = Mathf.Max(0f, jumpCooldownC - Time.deltaTime);
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true && jumpCooldownC <= 0f) {
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown("joystick button 1")) && isGrounded == true && jumpCooldownC <= 0f) {
             rb.AddForce(new Vector3(0, jump, 0), ForceMode.Impulse);
             isGrounded = false;
             donkoAnims.SetTrigger("didJump");
@@ -111,6 +118,10 @@ public class DonkoController : MonoBehaviour {
         Vector3 dir = new Vector3(0, -distance);
         Debug.DrawRay(transform.position + transform.GetChild(0).forward * -0.35f, dir);
         if (Physics.Raycast(transform.position + transform.GetChild(0).forward * -0.35f, dir, out hit, distance)) {
+            if (!isGrounded && airspeedCurrent < airspeedMult + 0.2f && donkoAnims.GetBool("isFalling")) {
+                // min: 0 /
+                gameObject.GetComponents<AudioSource>()[1].Play();
+            }
             isGrounded = true;
             // donkoAnims.SetBool("isJumping", false);
             donkoAnims.SetBool("isFalling", false);
