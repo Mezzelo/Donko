@@ -23,6 +23,8 @@ public class CameraController : MonoBehaviour {
     public float zoomDistanceMin = 4f;
     public float scrollSpeed = 0.75f;
 
+    Vector3 normalPosition;
+
 
     // Use this for initialization
     void Start() {
@@ -53,34 +55,19 @@ public class CameraController : MonoBehaviour {
             offsetX = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * turnSpeed, Vector3.up) * offsetX;
             offsetY = Quaternion.AngleAxis(offY * turnSpeed, Vector3.right) * offsetY;
         }
-        transform.position = player.position - new Vector3(0, 0, distance) + offsetX + offsetY;
-        // CameraClose();
+        normalPosition = player.position - new Vector3(0, 0, distance) + offsetX + offsetY;
+        transform.position = normalPosition;
+        CameraClose();
         transform.LookAt(player.position);
     }
 
     void CameraClose() {
+        Debug.DrawRay(player.position, (transform.position - player.position), Color.green);
+        Ray cameraRay = new Ray(player.position, (transform.position - player.position));
         RaycastHit ray;
-        Debug.DrawRay(transform.position, -transform.forward, Color.red, .001f);
-        Debug.DrawRay(transform.position, transform.right, Color.red, .001f);
-        Debug.DrawRay(transform.position, -transform.right, Color.red, .001f);
-        if ((Physics.Raycast(transform.position, -transform.forward, out ray, 10f, 3, queryTriggerInteraction: QueryTriggerInteraction.Ignore)) ||
-               (Physics.Raycast(transform.position, transform.right, out ray, 10f, 3, queryTriggerInteraction: QueryTriggerInteraction.Ignore)) ||
-               (Physics.Raycast(transform.position, -transform.right, out ray, 10f, 3, queryTriggerInteraction: QueryTriggerInteraction.Ignore))) {
-            // Debug.Log("rayHist");
-            if (ray.distance < 0.5f) {
-                transform.localPosition += new Vector3(0, 0, .1f);
-            }
-            else if (transform.localPosition.z > StartPos.z && ray.distance > .8f) {
-                transform.localPosition -= new Vector3(0, 0, .05f);
-            }
-
-            if (Physics.Raycast(transform.position, transform.up, out ray, 10f, 3, queryTriggerInteraction: QueryTriggerInteraction.Ignore)) {
-                if (ray.distance < 0.65f) {
-                    transform.localPosition -= new Vector3(0, .005f, 0);
-                }
-                else if (transform.localPosition.y < StartPos.y && ray.distance > .65f) {
-                    transform.localPosition += new Vector3(0, .005f, 0);
-                }
+        if (Physics.Raycast(cameraRay, out ray, (transform.position - player.position).magnitude, ~(1 << 12))) {
+        if (ray.distance < (transform.position - player.position).magnitude) {
+                transform.position = player.position + (transform.position - player.position).normalized * ray.distance * 0.8f;
             }
         }
     }

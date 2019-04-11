@@ -7,15 +7,18 @@ public class LightMeter : MonoBehaviour
 {
     public Transform uiCanvas;
     public float maxLight = 1.5f;
-    public float movespeedLit = 5f;
+    float movespeedLit;
     public float movespeedUnlit = 1f;
 
     float currentLight = 1f;
     float maxIntensity = 2f;
+
+    float movespeedTween = 1f;
     // Start is called before the first frame update
     void Start() {
         currentLight = maxLight;
         maxIntensity = this.GetComponent<LightDetection>().sunlight.GetComponent<Light>().intensity;
+        movespeedLit = this.GetComponent<DonkoController>().speed;
     }
 
     // Update is called once per frame
@@ -25,7 +28,9 @@ public class LightMeter : MonoBehaviour
             currentLight = Mathf.Max(currentLight - Time.fixedDeltaTime, 0f);
             this.GetComponent<LightDetection>().sunlight.GetComponent<Light>().intensity =
                 maxIntensity * currentLight / maxLight;
-            this.GetComponent<DonkoController>().speed = movespeedUnlit;
+            if (movespeedTween > 0f)
+                movespeedTween = Mathf.Max(movespeedTween - Time.fixedDeltaTime * 2.5f, 0f);
+            this.GetComponent<DonkoController>().speed = Mathf.Lerp(movespeedLit * movespeedUnlit, movespeedLit, movespeedTween);
             this.GetComponent<DonkoController>().jump = 0f;
             if (currentLight <= 0f) {
                 this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
@@ -40,7 +45,9 @@ public class LightMeter : MonoBehaviour
             currentLight = Mathf.Min(currentLight + Time.fixedDeltaTime, maxLight);
             this.GetComponent<LightDetection>().sunlight.GetComponent<Light>().intensity =
                 maxIntensity * currentLight / maxLight;
-            this.GetComponent<DonkoController>().speed = movespeedLit;
+            if (movespeedTween < 1f)
+                movespeedTween = Mathf.Min(movespeedTween + Time.fixedDeltaTime * 2.5f, 1f);
+            this.GetComponent<DonkoController>().speed = Mathf.Lerp(movespeedLit * movespeedUnlit, movespeedLit, movespeedTween);
             this.GetComponent<DonkoController>().jump = 7f;
         }
         uiCanvas.GetComponent<AudioSource>().volume = (1f - currentLight / maxLight) * 0.2f;

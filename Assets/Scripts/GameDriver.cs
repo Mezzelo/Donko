@@ -22,6 +22,7 @@ public class GameDriver : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Physics.gravity = new Vector3(0f, -13f, 0f);
     }
 
     // Update is called once per frame
@@ -35,10 +36,10 @@ public class GameDriver : MonoBehaviour
             Time.timeScale = (isPaused ? 0f : 1f);
         }
 
-        if (player.position.x > 60f) {
-            GlobalVars.menuScreen = 2;
-            isTransition = true;
-        }
+        // if (player.position.x > 60f) {
+        //     GlobalVars.menuScreen = 2;
+        //     isTransition = true;
+        // }
         if (isTransition) {
             if (tween < 4f) {
                 tween = tween + Time.deltaTime;

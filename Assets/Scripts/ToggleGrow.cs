@@ -63,8 +63,11 @@ public class ToggleGrow : ToggleBase
             transform.rotation = Quaternion.Euler(Vector3.Lerp(origRot + rotOffsetDeactivated,
                 origRot, MezzMath.fullSine(animC / animTime)));
             transform.localScale = Vector3.Lerp(scaleDeactivated, origScale, MezzMath.fullSine(animC / animTime));
-            if (lightComponent != null)
+            if (lightComponent != null) {
                 lightComponent.intensity = Mathf.Lerp(intensityOrig + intensityOffset, intensityOrig, MezzMath.fullSine(animC / animTime));
+                if (lightComponent.intensity > 0f)
+                    lightComponent.enabled = true;
+            }
         }
         else if (animC > 0f && !isActivated) {
             animC = Mathf.Max(animC - Time.deltaTime, 0f);
@@ -72,8 +75,11 @@ public class ToggleGrow : ToggleBase
             transform.rotation = Quaternion.Euler(Vector3.Lerp(origRot + rotOffsetDeactivated,
                 origRot, MezzMath.fullSine(animC / animTime)));
             transform.localScale = Vector3.Lerp(scaleDeactivated, origScale, MezzMath.fullSine(animC / animTime));
-            if (lightComponent != null)
+            if (lightComponent != null) {
                 lightComponent.intensity = Mathf.Lerp(intensityOrig + intensityOffset, intensityOrig, MezzMath.fullSine(animC / animTime));
+                if (lightComponent.intensity <= 0f)
+                    lightComponent.enabled = false;
+            }
         }
     }
 }
