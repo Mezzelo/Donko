@@ -1,6 +1,0 @@
-WASD/Arrow keys/Left joystick to move and interact with menus
-Mouse/right joystick to move camera
-Spacebar/B to jump
-E/A to interact with flickers of light and select menu options
-
-Avoid the darkness
