@@ -13,6 +13,9 @@ public class GameDriver : MonoBehaviour
 
     bool isTransition = false;
     bool isPaused = false;
+    
+    Transform levelEndPoint;
+    
 
     public void gameOver() {
         GlobalVars.menuScreen = 1;

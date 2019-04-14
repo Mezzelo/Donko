@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FlickerAnim : MonoBehaviour
 {
-    Vector3 startPos;
+    public Vector3 startPos;
     float startTick;
     float dir = 1f;
     float animSpeed;

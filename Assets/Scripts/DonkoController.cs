@@ -20,11 +20,10 @@ public class DonkoController : MonoBehaviour {
     float jumpCooldownC = 0f;
 
     bool isSwinging = false;
-    float swingCooldown = 0f;
+    Transform currentVine;
 
     public void doDeath() {
         if (isSwinging) {
-            swingCooldown = 1f;
             transform.GetChild(0).localPosition = new Vector3(0f, transform.GetChild(0).localPosition.y, 0f);
             Destroy(gameObject.GetComponent<FixedJoint>());
             isSwinging = false;
@@ -51,18 +50,22 @@ public class DonkoController : MonoBehaviour {
     }
 
     private void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.tag == "Vine" && !isSwinging && swingCooldown <= 0f) {
-            Debug.Log("attach 2 vine!");
-            isSwinging = true;
-            rb.constraints = RigidbodyConstraints.None;
-            transform.rotation = Quaternion.LookRotation((collision.transform.position - transform.position).normalized, Vector3.up);
-            transform.GetChild(0).localPosition = new Vector3(0f, transform.GetChild(0).localPosition.y, 0.3f);
-            transform.GetChild(0).localRotation = Quaternion.identity;
-            gameObject.AddComponent<FixedJoint>();
-            gameObject.GetComponent<FixedJoint>().connectedBody = collision.gameObject.GetComponent<Rigidbody>();
-            gameObject.GetComponent<AudioSource>().Stop();
-            // gameObject.GetComponent<FixedJoint>().massScale = 1f;
-            // gameObject.AddComponent<FixedJoint>().connectedMassScale = 1f;
+        if (collision.gameObject.tag == "Vine" && !isSwinging) {
+            if (collision.transform.parent.GetComponent<VineScript>().canSwing()) {
+                // Debug.Log("attach 2 vine!");
+                isSwinging = true;
+                currentVine = collision.transform.parent;
+                donkoAnims.SetBool("isSwinging", true);
+                rb.constraints = RigidbodyConstraints.None;
+                transform.rotation = Quaternion.LookRotation((collision.transform.position - transform.position).normalized, Vector3.up);
+                transform.GetChild(0).localPosition = new Vector3(0f, transform.GetChild(0).localPosition.y, 0.3f);
+                transform.GetChild(0).localRotation = Quaternion.identity;
+                gameObject.AddComponent<FixedJoint>();
+                gameObject.GetComponent<FixedJoint>().connectedBody = collision.gameObject.GetComponent<Rigidbody>();
+                gameObject.GetComponent<AudioSource>().Stop();
+                // gameObject.GetComponent<FixedJoint>().massScale = 1f;
+                // gameObject.AddComponent<FixedJoint>().connectedMassScale = 1f;
+            }
         }
     }
     // Update is called once per frame
@@ -94,8 +97,6 @@ public class DonkoController : MonoBehaviour {
             if (airspeedCurrent < 1f)
                 airspeedCurrent = Mathf.Min(airspeedCurrent + Time.deltaTime * 0.5f, 1f);
         }
-        if (swingCooldown > 0f)
-            swingCooldown = Mathf.Max(swingCooldown - Time.deltaTime, 0f);
 
         if (isSwinging) {
             var desiredMoveDirection = (forward * vertical + right * horizontal) * airspeedCurrent;
@@ -149,13 +150,14 @@ public class DonkoController : MonoBehaviour {
             jumpCooldownC = jumpCooldownMax;
             // donkoAnims.speed = 1f;
         } else if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown("joystick button 1")) && isSwinging) {
-            swingCooldown = 1f;
             Destroy(gameObject.GetComponent<FixedJoint>());
             rb.constraints = RigidbodyConstraints.FreezeRotation;
             isSwinging = false;
+            currentVine.gameObject.GetComponent<VineScript>().disableVine();
+            donkoAnims.SetBool("isSwinging", false);
             transform.rotation = Quaternion.identity;
             transform.GetChild(0).localPosition = new Vector3(0f, transform.GetChild(0).localPosition.y, 0f);
-            rb.AddForce(new Vector3(0, jump, 0), ForceMode.Impulse);
+            rb.AddForce(new Vector3(0, jump * 0.5f, 0), ForceMode.Impulse);
         }
     }
 
