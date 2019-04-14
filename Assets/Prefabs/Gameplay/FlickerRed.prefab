@@ -9554,7 +9554,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 2
-  m_Color: {r: 0, g: 0.26607513, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_Intensity: 8
   m_Range: 1.0751877
   m_SpotAngle: 30
@@ -9594,9 +9594,9 @@ GameObject:
   - component: {fileID: 2242382796771636481}
   - component: {fileID: 2545726843174108890}
   m_Layer: 0
-  m_Name: FlickerSpot
+  m_Name: FlickerRed
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -9629,7 +9629,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionRadius: 2
-  flickerType: 0
+  flickerType: 1
   isActivated: 0
   singleUse: 0
   unactivatedObjects:
@@ -9773,7 +9773,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 2
-  m_Color: {r: 0, g: 0.26607513, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_Intensity: 4.19
   m_Range: 0.75
   m_SpotAngle: 30

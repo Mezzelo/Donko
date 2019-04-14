@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - NoShadow
+  - Vine
+  - LevelTrigger
   layers:
   - Default
   - TransparentFX
@@ -19,8 +21,8 @@ TagManager:
   - NoShadow
   - ShadowOnly
   - Player
-  - 
-  - 
+  - Vine
+  - ShaderDisplacement
   - 
   - 
   - 

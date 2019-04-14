@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class DonkoController : MonoBehaviour {
 
@@ -18,7 +19,16 @@ public class DonkoController : MonoBehaviour {
 
     float jumpCooldownC = 0f;
 
+    bool isSwinging = false;
+    float swingCooldown = 0f;
+
     public void doDeath() {
+        if (isSwinging) {
+            swingCooldown = 1f;
+            transform.GetChild(0).localPosition = new Vector3(0f, transform.GetChild(0).localPosition.y, 0f);
+            Destroy(gameObject.GetComponent<FixedJoint>());
+            isSwinging = false;
+        }
         transform.GetChild(1).GetComponent<MeshCollider>().enabled = true;
         donkoAnims.SetTrigger("didDie");
         gameObject.GetComponent<AudioSource>().Stop();
@@ -26,6 +36,7 @@ public class DonkoController : MonoBehaviour {
 
     Vector3 posLastTick;
     float donkoVeloc;
+
 
     // Use this for initialization
     void Start() {
@@ -39,6 +50,21 @@ public class DonkoController : MonoBehaviour {
         posLastTick = transform.position;
     }
 
+    private void OnCollisionEnter(Collision collision) {
+        if (collision.gameObject.tag == "Vine" && !isSwinging && swingCooldown <= 0f) {
+            Debug.Log("attach 2 vine!");
+            isSwinging = true;
+            rb.constraints = RigidbodyConstraints.None;
+            transform.rotation = Quaternion.LookRotation((collision.transform.position - transform.position).normalized, Vector3.up);
+            transform.GetChild(0).localPosition = new Vector3(0f, transform.GetChild(0).localPosition.y, 0.3f);
+            transform.GetChild(0).localRotation = Quaternion.identity;
+            gameObject.AddComponent<FixedJoint>();
+            gameObject.GetComponent<FixedJoint>().connectedBody = collision.gameObject.GetComponent<Rigidbody>();
+            gameObject.GetComponent<AudioSource>().Stop();
+            // gameObject.GetComponent<FixedJoint>().massScale = 1f;
+            // gameObject.AddComponent<FixedJoint>().connectedMassScale = 1f;
+        }
+    }
     // Update is called once per frame
     void Update() {
         if (Mathf.Abs(rb.velocity.y) > 0.1f)
@@ -68,47 +94,68 @@ public class DonkoController : MonoBehaviour {
             if (airspeedCurrent < 1f)
                 airspeedCurrent = Mathf.Min(airspeedCurrent + Time.deltaTime * 0.5f, 1f);
         }
+        if (swingCooldown > 0f)
+            swingCooldown = Mathf.Max(swingCooldown - Time.deltaTime, 0f);
 
-        var desiredMoveDirection = (forward * vertical + right * horizontal) * airspeedCurrent;
-
-        // the actual movement
-        if (desiredMoveDirection != Vector3.zero && Time.timeScale > 0f) {
-            transform.GetChild(0).forward = desiredMoveDirection.normalized;
-            transform.Translate(desiredMoveDirection * speed * Time.deltaTime);
-            donkoAnims.SetBool("isMoving", true);
-            donkoAnims.SetFloat("walkForwards", vertical);
-            donkoAnims.SetFloat("walkSide", horizontal);
-            donkoAnims.SetFloat("doIdle", 0f);
-            if (isGrounded)
-                gameObject.GetComponent<AudioSource>().volume = Mathf.Max(-0.8f + airspeedCurrent, 0f);
-            else
-                gameObject.GetComponent<AudioSource>().volume = Mathf.Max(-0.8f + airspeedCurrent, 0f);
-            // donkoAnims.speed = donkoVeloc / 0.05f;
+        if (isSwinging) {
+            var desiredMoveDirection = (forward * vertical + right * horizontal) * airspeedCurrent;
+            if (desiredMoveDirection != Vector3.zero && Time.timeScale > 0f) {
+                rb.AddForce(desiredMoveDirection * 200f * Time.deltaTime, ForceMode.Force);
+            }
         } else {
-            donkoAnims.SetBool("isMoving", false);
-            donkoAnims.SetFloat("doIdle", Mathf.Repeat(donkoAnims.GetFloat("doIdle") + Time.deltaTime, 12f));
-            gameObject.GetComponent<AudioSource>().volume = 0f;
-            // donkoAnims.speed = 1f;
-        }
 
-        // This will keep Donko from toppling over
-        // Quaternion rot = rb.rotation;
-        // rot[0] = 0;
-        // rot[2] = 0;
-        // rb.rotation = rot;
+
+            var desiredMoveDirection = (forward * vertical + right * horizontal) * airspeedCurrent;
+
+            // the actual movement
+            if (desiredMoveDirection != Vector3.zero && Time.timeScale > 0f) {
+                transform.GetChild(0).forward = desiredMoveDirection.normalized;
+                transform.Translate(desiredMoveDirection * speed * Time.deltaTime);
+                donkoAnims.SetBool("isMoving", true);
+                donkoAnims.SetFloat("walkForwards", vertical);
+                donkoAnims.SetFloat("walkSide", horizontal);
+                donkoAnims.SetFloat("doIdle", 0f);
+                if (isGrounded)
+                    gameObject.GetComponent<AudioSource>().volume = Mathf.Max(-0.8f + airspeedCurrent, 0f);
+                else
+                    gameObject.GetComponent<AudioSource>().volume = Mathf.Max(-0.8f + airspeedCurrent, 0f);
+                // donkoAnims.speed = donkoVeloc / 0.05f;
+            }
+            else {
+                donkoAnims.SetBool("isMoving", false);
+                donkoAnims.SetFloat("doIdle", Mathf.Repeat(donkoAnims.GetFloat("doIdle") + Time.deltaTime, 12f));
+                gameObject.GetComponent<AudioSource>().volume = 0f;
+                // donkoAnims.speed = 1f;
+            }
+
+            // This will keep Donko from toppling over
+            // Quaternion rot = rb.rotation;
+            // rot[0] = 0;
+            // rot[2] = 0;
+            // rb.rotation = rot;
+        }
 
 
         // jump handler
         GroundCheck();
         if (jumpCooldownC > 0f)
             jumpCooldownC = Mathf.Max(0f, jumpCooldownC - Time.deltaTime);
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown("joystick button 1")) && isGrounded == true && jumpCooldownC <= 0f) {
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown("joystick button 1")) && isGrounded && jumpCooldownC <= 0f
+            && !isSwinging) {
             rb.AddForce(new Vector3(0, jump, 0), ForceMode.Impulse);
             isGrounded = false;
             donkoAnims.SetTrigger("didJump");
             donkoAnims.SetFloat("doIdle", 0f);
             jumpCooldownC = jumpCooldownMax;
             // donkoAnims.speed = 1f;
+        } else if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown("joystick button 1")) && isSwinging) {
+            swingCooldown = 1f;
+            Destroy(gameObject.GetComponent<FixedJoint>());
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
+            isSwinging = false;
+            transform.rotation = Quaternion.identity;
+            transform.GetChild(0).localPosition = new Vector3(0f, transform.GetChild(0).localPosition.y, 0f);
+            rb.AddForce(new Vector3(0, jump, 0), ForceMode.Impulse);
         }
     }
 
@@ -117,7 +164,8 @@ public class DonkoController : MonoBehaviour {
         float distance = 1.35f;
         Vector3 dir = new Vector3(0, -distance);
         Debug.DrawRay(transform.position + transform.GetChild(0).forward * -0.35f, dir);
-        if (Physics.Raycast(transform.position + transform.GetChild(0).forward * -0.35f, dir, out hit, distance)) {
+        if (Physics.Raycast(transform.position + transform.GetChild(0).forward * -0.35f, dir, out hit, distance)
+            && !isSwinging) {
             if (!isGrounded && airspeedCurrent < airspeedMult + 0.2f && donkoAnims.GetBool("isFalling")) {
                 // min: 0 /
                 gameObject.GetComponents<AudioSource>()[1].Play();

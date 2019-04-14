@@ -14,11 +14,13 @@ public class LightMeter : MonoBehaviour
     float maxIntensity = 2f;
 
     float movespeedTween = 1f;
+    float oldJump;
     // Start is called before the first frame update
     void Start() {
         currentLight = maxLight;
         maxIntensity = this.GetComponent<LightDetection>().sunlight.GetComponent<Light>().intensity;
         movespeedLit = this.GetComponent<DonkoController>().speed;
+        oldJump = this.GetComponent<DonkoController>().jump;
     }
 
     // Update is called once per frame
@@ -48,7 +50,7 @@ public class LightMeter : MonoBehaviour
             if (movespeedTween < 1f)
                 movespeedTween = Mathf.Min(movespeedTween + Time.fixedDeltaTime * 2.5f, 1f);
             this.GetComponent<DonkoController>().speed = Mathf.Lerp(movespeedLit * movespeedUnlit, movespeedLit, movespeedTween);
-            this.GetComponent<DonkoController>().jump = 7f;
+            this.GetComponent<DonkoController>().jump = oldJump;
         }
         uiCanvas.GetComponent<AudioSource>().volume = (1f - currentLight / maxLight) * 0.2f;
         // uiCanvas.Find("BarContainer").Find("BarFill").localScale = new Vector3(MezzMath.fullSine(currentLight / maxLight), 1f, 1f);
