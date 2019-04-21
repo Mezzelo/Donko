@@ -5,6 +5,10 @@ using UnityEngine;
 public class VineScript : ToggleBase
 {
     float cooldown = 0f;
+    public Transform lastCapsule;
+    public bool debug = false;
+    Vector3 lastLastPos;
+    float vineVeloc;
 
     public bool canSwing() {
         return isActivated;
@@ -33,13 +37,16 @@ public class VineScript : ToggleBase
     }
 
     // Start is called before the first frame update
-    void Start()
-    {
-        
+    void Start() {
+        lastLastPos = lastCapsule.position;
     }
 
     // Update is called once per frame
     void FixedUpdate() {
+        vineVeloc = (lastCapsule.position - lastLastPos).magnitude;
+        gameObject.GetComponent<AudioSource>().volume = (vineVeloc * 1.7f);
+        if (debug)
+            Debug.Log(vineVeloc);
         if (!isActivated) {
             for (int i = 1; i < transform.childCount; i++) {
                 if (transform.GetChild(i).GetComponent<Rigidbody>() != null) {
@@ -58,5 +65,6 @@ public class VineScript : ToggleBase
                 }
             }
         }
+        lastLastPos = lastCapsule.position;
     }
 }

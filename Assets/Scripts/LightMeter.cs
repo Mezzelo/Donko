@@ -23,6 +23,8 @@ public class LightMeter : MonoBehaviour
     float vignetteNormal;
     Vignette postVignette;
 
+    float normalMusicVol = 0f;
+
     public void doDeath() {
         if (currentLight > 0f) {
             this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
@@ -47,6 +49,11 @@ public class LightMeter : MonoBehaviour
 
         uiCanvas.GetComponent<PostProcessVolume>().profile.TryGetSettings(out postVignette);
         vignetteNormal = postVignette.intensity.value;
+
+
+        if (uiCanvas.GetComponents<AudioSource>().Length > 1) {
+            normalMusicVol = uiCanvas.GetComponents<AudioSource>()[1].volume;
+        }
     }
 
     // Update is called once per frame
@@ -92,6 +99,10 @@ public class LightMeter : MonoBehaviour
         }
         // Debug.Log(donkoModel.GetComponent<SkinnedMeshRenderer>().materials[1].shader.);
         uiCanvas.GetComponent<AudioSource>().volume = (1f - currentLight / maxLight) * 0.2f;
+        if (uiCanvas.GetComponents<AudioSource>().Length > 1) {
+            uiCanvas.GetComponents<AudioSource>()[1].volume = Mathf.Lerp(0f, normalMusicVol, currentLight / maxLight);
+            uiCanvas.GetComponents<AudioSource>()[2].volume = Mathf.Lerp(normalMusicVol * 3.5f, 0f, currentLight / maxLight);
+        }
         uiCanvas.Find("BarContainer").Find("BarFill").localScale = new Vector3(MezzMath.fullSine(currentLight / maxLight), 1f, 1f);
         uiCanvas.Find("BarContainer").Find("BarFill").localPosition = new Vector3(125f * MezzMath.fullSine(currentLight / maxLight) - 125f, 0f, 0f);
     }

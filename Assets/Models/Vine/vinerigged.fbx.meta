@@ -19,6 +19,12 @@ ModelImporter:
     100026: pPlane6
     100028: pPlane7
     100030: //RootNode
+    100032: joint10
+    100034: joint11
+    100036: joint12
+    100038: joint2
+    100040: joint3
+    100042: joint4
     400000: joint1
     400002: joint5
     400004: joint6
@@ -35,7 +41,14 @@ ModelImporter:
     400026: pPlane6
     400028: pPlane7
     400030: //RootNode
+    400032: joint10
+    400034: joint11
+    400036: joint12
+    400038: joint2
+    400040: joint3
+    400042: joint4
     2100000: lambert1
+    2100002: lambert2
     4300000: pCube1
     4300002: pPlane5
     4300004: pPlane7
@@ -107,7 +120,7 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.099999994
+    previousCalculatedGlobalScale: 0.25
     hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60

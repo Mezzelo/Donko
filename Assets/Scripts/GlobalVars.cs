@@ -16,4 +16,7 @@ public class GlobalVars
     public static bool playerShadow = false;
 
     public static int gameVol = 100;
+
+    public static bool scoresSetup = false;
+    public static int[] highScores = new int[10];
 }

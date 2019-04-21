@@ -179,10 +179,10 @@ public class DonkoController : MonoBehaviour {
 
     void GroundCheck() {
         RaycastHit hit;
-        float distance = 1.35f;
+        float distance = 1.55f;
         Vector3 dir = new Vector3(0, -distance);
-        Debug.DrawRay(transform.position + transform.GetChild(0).forward * -0.35f, dir);
-        if (Physics.Raycast(transform.position + transform.GetChild(0).forward * -0.35f, dir, out hit, distance)
+        Debug.DrawRay(transform.position + transform.GetChild(0).forward * -0.2f, dir);
+        if (Physics.Raycast(transform.position + transform.GetChild(0).forward * -0.2f, dir, out hit, distance)
             && !isSwinging) {
             if (!isGrounded && airspeedCurrent < airspeedMult + 0.2f && donkoAnims.GetBool("isFalling")) {
                 gameObject.GetComponents<AudioSource>()[1].Play();
