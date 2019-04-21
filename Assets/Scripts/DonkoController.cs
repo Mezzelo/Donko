@@ -21,6 +21,9 @@ public class DonkoController : MonoBehaviour {
 
     bool isSwinging = false;
     Transform currentVine;
+    
+    float attackTimeC = 0f;
+    float attackTimeMax = 1.266f;
 
     public void doDeath() {
         if (isSwinging) {
@@ -34,7 +37,7 @@ public class DonkoController : MonoBehaviour {
     }
 
     Vector3 posLastTick;
-    float donkoVeloc;
+    Vector3 donkoVeloc;
 
 
     // Use this for initialization
@@ -45,7 +48,7 @@ public class DonkoController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        donkoVeloc = (transform.position - posLastTick).magnitude;
+        donkoVeloc = (transform.position - posLastTick)/Time.fixedDeltaTime;
         posLastTick = transform.position;
     }
 
@@ -63,6 +66,7 @@ public class DonkoController : MonoBehaviour {
                 gameObject.AddComponent<FixedJoint>();
                 gameObject.GetComponent<FixedJoint>().connectedBody = collision.gameObject.GetComponent<Rigidbody>();
                 gameObject.GetComponent<AudioSource>().Stop();
+                collision.gameObject.GetComponent<Rigidbody>().AddForce(donkoVeloc * 75f, ForceMode.Force);
                 // gameObject.GetComponent<FixedJoint>().massScale = 1f;
                 // gameObject.AddComponent<FixedJoint>().connectedMassScale = 1f;
             }
@@ -75,6 +79,14 @@ public class DonkoController : MonoBehaviour {
         // get the movement axes for the player
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
+
+        if (attackTimeC > 0f)
+            attackTimeC = Mathf.Max(0f, attackTimeC - Time.deltaTime);
+        if (Input.GetKeyDown(KeyCode.F) && attackTimeC <= 0f && !isSwinging && isGrounded) {
+            donkoAnims.SetTrigger("didAttack");
+            attackTimeC = attackTimeMax;
+            transform.GetChild(1).GetComponent<MeshCollider>().enabled = true;
+        }
 
         // this is our camera
         var camera = Camera.main;
@@ -98,15 +110,15 @@ public class DonkoController : MonoBehaviour {
                 airspeedCurrent = Mathf.Min(airspeedCurrent + Time.deltaTime * 0.5f, 1f);
         }
 
-        if (isSwinging) {
+        if (isSwinging && attackTimeC <= 0f) {
             var desiredMoveDirection = (forward * vertical + right * horizontal) * airspeedCurrent;
             if (desiredMoveDirection != Vector3.zero && Time.timeScale > 0f) {
-                rb.AddForce(desiredMoveDirection * 200f * Time.deltaTime, ForceMode.Force);
+                rb.AddForce(desiredMoveDirection * 650f * Time.deltaTime, ForceMode.Force);
             }
         } else {
 
 
-            var desiredMoveDirection = (forward * vertical + right * horizontal) * airspeedCurrent;
+            var desiredMoveDirection = (forward * vertical + right * horizontal) * airspeedCurrent * (attackTimeC > 0f ? 0f : 1f);
 
             // the actual movement
             if (desiredMoveDirection != Vector3.zero && Time.timeScale > 0f) {
@@ -119,7 +131,7 @@ public class DonkoController : MonoBehaviour {
                 if (isGrounded)
                     gameObject.GetComponent<AudioSource>().volume = Mathf.Max(-0.8f + airspeedCurrent, 0f);
                 else
-                    gameObject.GetComponent<AudioSource>().volume = Mathf.Max(-0.8f + airspeedCurrent, 0f);
+                    gameObject.GetComponent<AudioSource>().volume = 0f;
                 // donkoAnims.speed = donkoVeloc / 0.05f;
             }
             else {
@@ -139,17 +151,20 @@ public class DonkoController : MonoBehaviour {
 
         // jump handler
         GroundCheck();
-        if (jumpCooldownC > 0f)
+        if (jumpCooldownC > 0f) {
+            donkoAnims.SetBool("jumpFrame", jumpCooldownC > jumpCooldownMax - 0.05f);
             jumpCooldownC = Mathf.Max(0f, jumpCooldownC - Time.deltaTime);
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown("joystick button 1")) && isGrounded && jumpCooldownC <= 0f
-            && !isSwinging) {
+        }
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown("joystick button 0")) && isGrounded && jumpCooldownC <= 0f
+            && !isSwinging && attackTimeC <= 0f) {
             rb.AddForce(new Vector3(0, jump, 0), ForceMode.Impulse);
             isGrounded = false;
             donkoAnims.SetTrigger("didJump");
+            donkoAnims.SetBool("jumpFrame", true);
             donkoAnims.SetFloat("doIdle", 0f);
             jumpCooldownC = jumpCooldownMax;
             // donkoAnims.speed = 1f;
-        } else if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown("joystick button 1")) && isSwinging) {
+        } else if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown("joystick button 0")) && isSwinging) {
             Destroy(gameObject.GetComponent<FixedJoint>());
             rb.constraints = RigidbodyConstraints.FreezeRotation;
             isSwinging = false;
@@ -158,6 +173,7 @@ public class DonkoController : MonoBehaviour {
             transform.rotation = Quaternion.identity;
             transform.GetChild(0).localPosition = new Vector3(0f, transform.GetChild(0).localPosition.y, 0f);
             rb.AddForce(new Vector3(0, jump * 0.5f, 0), ForceMode.Impulse);
+            gameObject.GetComponent<AudioSource>().Play();
         }
     }
 
@@ -169,7 +185,6 @@ public class DonkoController : MonoBehaviour {
         if (Physics.Raycast(transform.position + transform.GetChild(0).forward * -0.35f, dir, out hit, distance)
             && !isSwinging) {
             if (!isGrounded && airspeedCurrent < airspeedMult + 0.2f && donkoAnims.GetBool("isFalling")) {
-                // min: 0 /
                 gameObject.GetComponents<AudioSource>()[1].Play();
             }
             isGrounded = true;

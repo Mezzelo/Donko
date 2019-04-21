@@ -9,16 +9,18 @@ public class GameDriver : MonoBehaviour
 
     public Transform player;
 
-    float tween = 0f;
+    float tween = 1.3f;
 
     bool isTransition = false;
     bool isPaused = false;
-    
+
+    bool isGameOver = false;
+
     Transform levelEndPoint;
     
 
     public void gameOver() {
-        GlobalVars.menuScreen = 1;
+        isGameOver = true;
         isTransition = true;
     }
 
@@ -26,6 +28,7 @@ public class GameDriver : MonoBehaviour
     void Start()
     {
         Physics.gravity = new Vector3(0f, -13f, 0f);
+        AudioListener.volume = 1f;
     }
 
     // Update is called once per frame
@@ -46,12 +49,17 @@ public class GameDriver : MonoBehaviour
         if (isTransition) {
             if (tween < 4f) {
                 tween = tween + Time.deltaTime;
-                transform.Find("Fade").GetComponent<Image>().color = Color.Lerp(Color.clear, Color.black, Mathf.Min(3f, tween)/3f);
+                transform.Find("Fade").GetComponent<Image>().color = Color.Lerp(Color.clear, Color.black, Mathf.Min(3f, tween) / 3f);
                 AudioListener.volume = Mathf.Max(0f, 1f - (tween) / 2f);
                 if (tween >= 4f) {
                     AudioListener.volume = 1f;
-                    SceneManager.LoadScene("Menu");
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 }
+            }
+        } else {
+            if (tween > 0f) {
+                tween = Mathf.Max(tween - Time.deltaTime, 0f);
+                transform.Find("Fade").GetComponent<Image>().color = Color.Lerp(Color.clear, Color.black, tween);
             }
         }
     }

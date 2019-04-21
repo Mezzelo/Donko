@@ -14,7 +14,7 @@ public class DonkoInteraction : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown("joystick button 0")) {
+        if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown("joystick button 2")) {
             for (int i = 0; i < interactionObjects.childCount; i++) {
                 InteractionObject interComponent = interactionObjects.GetChild(i).GetComponent<InteractionObject>();
                 if ((this.transform.position - interactionObjects.GetChild(i).position).magnitude <

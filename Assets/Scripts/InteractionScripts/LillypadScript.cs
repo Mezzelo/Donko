@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class LillypadScript : ToggleBase
 {
+
+    public float bobMultiplier = 1f;
+    public float bobRotMultiplier = 1f;
+
     float startTick;
     float animC;
 
@@ -58,8 +62,8 @@ public class LillypadScript : ToggleBase
         else if (animC > 0f && !isActivated) {
             animC = Mathf.Max(animC - Time.deltaTime, 0f);
         }
-        transform.position = origPos + new Vector3(0f, Mathf.Sin(Time.time - startTick + sineOffset) * 0.05f * dir, 0f) 
+        transform.position = origPos + new Vector3(0f, Mathf.Sin(Time.time - startTick + sineOffset) * 0.05f * dir * bobMultiplier, 0f) 
             + new Vector3(0f, -1f + 1f * MezzMath.halfSine(animC/ 1.5f), 0f);
-        transform.rotation = Quaternion.Euler(origRot + new Vector3(Mathf.Sin(Time.time * 2f - startTick + sineOffset) * 2.5f * dir, (Time.time - startTick + sineOffset) * 5f * dir, 0f));
+        transform.rotation = Quaternion.Euler(origRot + new Vector3(Mathf.Sin(Time.time * 2f - startTick + sineOffset) * 2.5f * dir * bobRotMultiplier, (Time.time - startTick + sineOffset) * 5f * dir, 0f));
     }
 }

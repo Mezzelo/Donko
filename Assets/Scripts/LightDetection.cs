@@ -16,14 +16,14 @@ public class LightDetection : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate() {
-        Ray sunlightRay = new Ray(transform.position + rayStartOffset, -sunlight.forward * 100f);
+        Ray sunlightRay = new Ray(transform.position + rayStartOffset, -sunlight.forward * 200f);
 
-        Debug.DrawRay(transform.position + rayStartOffset, -sunlight.forward * 100f, Color.green);
+        Debug.DrawRay(transform.position + rayStartOffset, -sunlight.forward * 200f, Color.green);
         // RaycastHit terrainDetection = new RaycastHit();
         // Terrain.activeTerrain.GetComponent<Collider>().Raycast(sunlightRay,
         //     out terrainDetection, 100f);
         // Debug.Log(terrainDetection.point);
-        if (Physics.Raycast(transform.position + rayStartOffset, -sunlight.forward * 100f, 100f, ~(1 << 10))
+        if (Physics.Raycast(transform.position + rayStartOffset, -sunlight.forward * 200f, 200f, ~(1 << 10))
             ) {
             isLit = false;
         } else {

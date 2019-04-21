@@ -6,6 +6,8 @@ public class GlobalVars
     // 0 = default, 1 = loss, 2 = win
     public static int menuScreen = 0;
 
+    public static int startSpawn = 0;
+
     // 0 = normal, 1 = hard
     public static int difficulty = 0;
 
