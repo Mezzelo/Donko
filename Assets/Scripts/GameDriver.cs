@@ -23,6 +23,8 @@ public class GameDriver : MonoBehaviour
     public float levelEndRadius = 20f;
     public string nextScene;
 
+    float levelTime;
+
     void OnDrawGizmosSelected() {
         if (levelEndPoint != null) {
             Gizmos.color = new Color(1f, 1f, 0.4f, 0.3f);
@@ -48,7 +50,7 @@ public class GameDriver : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-
+        levelTime += Time.deltaTime;
         if ((Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.JoystickButton7)) && !isTransition) {
             isPaused = !isPaused;
             Cursor.visible = isPaused;
@@ -87,6 +89,7 @@ public class GameDriver : MonoBehaviour
                     new Color(0.78f, 0.78f, 0.78f), MezzMath.fullSine(Mathf.Min(3.5f, tween) / 3.5f));
             }
             else if (tween < 7f && levelStatus == 1) {
+                Debug.Log(levelTime);
                 tween = tween + Time.deltaTime;
                 transform.Find("Fade").GetComponent<Image>().color = Color.Lerp(Color.clear,
                     Color.black, MezzMath.fullSine(Mathf.Min(3.5f, tween - 3.5f) / 3.5f));
