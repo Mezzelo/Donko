@@ -63,7 +63,7 @@ public class LillypadScript : ToggleBase
             animC = Mathf.Max(animC - Time.deltaTime, 0f);
         }
         transform.position = origPos + new Vector3(0f, Mathf.Sin(Time.time - startTick + sineOffset) * 0.05f * dir * bobMultiplier, 0f) 
-            + new Vector3(0f, -1f + 1f * MezzMath.halfSine(animC/ 1.5f), 0f);
+            + new Vector3(0f, -1f * bobMultiplier + 1f * MezzMath.halfSine(animC/ 1.5f) * bobMultiplier, 0f);
         transform.rotation = Quaternion.Euler(origRot + new Vector3(Mathf.Sin(Time.time * 2f - startTick + sineOffset) * 2.5f * dir * bobRotMultiplier, (Time.time - startTick + sineOffset) * 5f * dir, 0f));
     }
 }

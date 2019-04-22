@@ -23,8 +23,11 @@ public class LightDetection : MonoBehaviour
         // Terrain.activeTerrain.GetComponent<Collider>().Raycast(sunlightRay,
         //     out terrainDetection, 100f);
         // Debug.Log(terrainDetection.point);
-        if (Physics.Raycast(transform.position + rayStartOffset, -sunlight.forward * 200f, 200f, ~(1 << 10))
+        if (Physics.Raycast(transform.position + rayStartOffset, -sunlight.forward * 200f, 200f, ~(1 << 10) & ~(1 << 12))
             ) {
+            // RaycastHit collision = new RaycastHit();
+            // Physics.Raycast(transform.position + rayStartOffset, -sunlight.forward * 200f, out collision, 200f, ~(1 << 10) & ~(1 << 12));
+            // Debug.Log(collision.collider.gameObject.name);
             isLit = false;
         } else {
             isLit = true;
