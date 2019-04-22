@@ -60,6 +60,7 @@ public class DonkoController : MonoBehaviour {
                 currentVine = collision.transform.parent;
                 donkoAnims.SetBool("isSwinging", true);
                 rb.constraints = RigidbodyConstraints.None;
+                transform.position = collision.transform.position + (transform.position - collision.transform.position).normalized * 0.75f;
                 transform.rotation = Quaternion.LookRotation((collision.transform.position - transform.position).normalized, Vector3.up);
                 transform.GetChild(0).localPosition = new Vector3(0f, transform.GetChild(0).localPosition.y, 0.3f);
                 transform.GetChild(0).localRotation = Quaternion.identity;
@@ -67,6 +68,7 @@ public class DonkoController : MonoBehaviour {
                 gameObject.GetComponent<FixedJoint>().connectedBody = collision.gameObject.GetComponent<Rigidbody>();
                 gameObject.GetComponent<AudioSource>().Stop();
                 collision.gameObject.GetComponent<Rigidbody>().AddForce(donkoVeloc * 75f, ForceMode.Force);
+                collision.transform.parent.GetComponent<VineScript>().toggleCollisions(false);
                 // gameObject.GetComponent<FixedJoint>().massScale = 1f;
                 // gameObject.AddComponent<FixedJoint>().connectedMassScale = 1f;
             }
@@ -131,7 +133,7 @@ public class DonkoController : MonoBehaviour {
                 if (isGrounded)
                     gameObject.GetComponent<AudioSource>().volume = Mathf.Max(-0.8f + airspeedCurrent, 0f);
                 else
-                    gameObject.GetComponent<AudioSource>().volume = 0f;
+                    gameObject.GetComponent<AudioSource>().volume = Mathf.Max(-0.8f + airspeedCurrent, 0f);
                 // donkoAnims.speed = donkoVeloc / 0.05f;
             }
             else {
@@ -159,6 +161,7 @@ public class DonkoController : MonoBehaviour {
             && !isSwinging && attackTimeC <= 0f) {
             rb.AddForce(new Vector3(0, jump, 0), ForceMode.Impulse);
             isGrounded = false;
+            gameObject.GetComponents<AudioSource>()[2].Play();
             donkoAnims.SetTrigger("didJump");
             donkoAnims.SetBool("jumpFrame", true);
             donkoAnims.SetFloat("doIdle", 0f);

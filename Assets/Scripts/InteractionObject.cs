@@ -50,6 +50,8 @@ public class InteractionObject : MonoBehaviour
                 if (unactivatedObjects.Length > interactionIndex) {
                     if (unactivatedObjects[interactionIndex].GetComponent<ToggleBase>() != null) {
                         unactivatedObjects[interactionIndex].GetComponent<ToggleBase>().toggleActivation(0);
+                    } else if (unactivatedObjects[interactionIndex].GetComponent<TutorialObject>() != null) {
+                        unactivatedObjects[interactionIndex].GetComponent<TutorialObject>().showTutorial();
                     }
                     else {
                         unactivatedObjects[interactionIndex].gameObject.SetActive(!isActivated);
@@ -58,6 +60,8 @@ public class InteractionObject : MonoBehaviour
                 if (activatedObjects.Length > interactionIndex) {
                     if (activatedObjects[interactionIndex].GetComponent<ToggleBase>() != null) {
                         activatedObjects[interactionIndex].GetComponent<ToggleBase>().toggleActivation(0);
+                    } else if (activatedObjects[interactionIndex].GetComponent<TutorialObject>() != null) {
+                        activatedObjects[interactionIndex].GetComponent<TutorialObject>().disableTutorial();
                     }
                     else {
                         activatedObjects[interactionIndex].gameObject.SetActive(isActivated);

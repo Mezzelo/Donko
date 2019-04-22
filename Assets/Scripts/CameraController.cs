@@ -31,7 +31,6 @@ public class CameraController : MonoBehaviour {
         offsetX = new Vector3(0, 0, distance);
         offsetY = new Vector3(0, 0, distance);
         StartPos = offsetX + offsetY;
-        Cursor.visible = false;
     }
 
     // Update is called once per frame

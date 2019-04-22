@@ -14,11 +14,15 @@ public class VineScript : ToggleBase
         return isActivated;
     }
 
-    public void disableVine() {
+    public void toggleCollisions(bool collisionsOn) {
         for (int i = 0; i < transform.childCount; i++) {
             if (transform.GetChild(i).GetComponent<CapsuleCollider>() != null)
-                transform.GetChild(i).GetComponent<CapsuleCollider>().enabled = false;
+                transform.GetChild(i).GetComponent<CapsuleCollider>().enabled = collisionsOn;
         }
+    }
+
+    public void disableVine() {
+        toggleCollisions(false);
         cooldown = 1f;
     }
 
@@ -59,10 +63,7 @@ public class VineScript : ToggleBase
         if (cooldown > 0f) {
             cooldown = Mathf.Max(0f, cooldown - Time.fixedDeltaTime);
             if (cooldown <= 0f) {
-                for (int i = 0; i < transform.childCount; i++) {
-                    if (transform.GetChild(i).GetComponent<CapsuleCollider>() != null)
-                        transform.GetChild(i).GetComponent<CapsuleCollider>().enabled = true;
-                }
+                toggleCollisions(true);
             }
         }
         lastLastPos = lastCapsule.position;
