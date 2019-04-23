@@ -109,7 +109,7 @@ public class DonkoController : MonoBehaviour {
                 airspeedCurrent = Mathf.Max(airspeedCurrent - Time.deltaTime * 0.5f, airspeedMult);
         } else {
             if (airspeedCurrent < 1f)
-                airspeedCurrent = Mathf.Min(airspeedCurrent + Time.deltaTime * 0.5f, 1f);
+                airspeedCurrent = Mathf.Min(airspeedCurrent + Time.deltaTime * 1f, 1f);
         }
 
         if (isSwinging && attackTimeC <= 0f) {
@@ -182,7 +182,7 @@ public class DonkoController : MonoBehaviour {
 
     void GroundCheck() {
         RaycastHit hit;
-        float distance = 1.55f;
+        float distance = 1.85f;
         Vector3 dir = new Vector3(0, -distance);
         Debug.DrawRay(transform.position + transform.GetChild(0).forward * -0.2f, dir);
         if (Physics.Raycast(transform.position + transform.GetChild(0).forward * -0.2f, dir, out hit, distance)

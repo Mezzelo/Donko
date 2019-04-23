@@ -7,6 +7,8 @@ public class LillypadScript : ToggleBase
 
     public float bobMultiplier = 1f;
     public float bobRotMultiplier = 1f;
+    public float bobSpeed = 1f;
+    public bool doSpin = true;
 
     float startTick;
     float animC;
@@ -51,6 +53,8 @@ public class LillypadScript : ToggleBase
         startTick = Time.time;
         sineOffset = Random.Range(0, Mathf.PI);
         dir = Random.Range(0.8f, 1.2f) * (Random.Range(0, 2) * -2 + 1);
+        if (isActivated)
+            animC = 1.5f;
     }
 
     // Update is called once per frame
@@ -62,8 +66,8 @@ public class LillypadScript : ToggleBase
         else if (animC > 0f && !isActivated) {
             animC = Mathf.Max(animC - Time.deltaTime, 0f);
         }
-        transform.position = origPos + new Vector3(0f, Mathf.Sin(Time.time - startTick + sineOffset) * 0.05f * dir * bobMultiplier, 0f) 
+        transform.position = origPos + new Vector3(0f, Mathf.Sin(Time.time * bobSpeed - startTick + sineOffset) * 0.05f * dir * bobMultiplier, 0f) 
             + new Vector3(0f, -1f * bobMultiplier + 1f * MezzMath.halfSine(animC/ 1.5f) * bobMultiplier, 0f);
-        transform.rotation = Quaternion.Euler(origRot + new Vector3(Mathf.Sin(Time.time * 2f - startTick + sineOffset) * 2.5f * dir * bobRotMultiplier, (Time.time - startTick + sineOffset) * 5f * dir, 0f));
+        transform.rotation = Quaternion.Euler(origRot + new Vector3(Mathf.Sin(Time.time * bobSpeed * 2f - startTick + sineOffset) * 2.5f * dir * bobRotMultiplier, (doSpin ? (Time.time - startTick + sineOffset) * 5f * dir : 0f), 0f));
     }
 }

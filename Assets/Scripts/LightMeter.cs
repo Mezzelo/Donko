@@ -25,6 +25,8 @@ public class LightMeter : MonoBehaviour
 
     float normalMusicVol = 0f;
 
+    float donkoSlow = 0f;
+
     public void doDeath() {
         if (currentLight > 0f) {
             this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
@@ -38,6 +40,10 @@ public class LightMeter : MonoBehaviour
 
     public void modifyDrainRate(float drainAdd) {
         drainRate += drainAdd;
+    }
+
+    public void addSlowModifier(float slowAdd) {
+        donkoSlow += slowAdd;
     }
 
     // Start is called before the first frame update
@@ -58,7 +64,8 @@ public class LightMeter : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate() {
-
+        if (donkoSlow > 0f)
+            donkoSlow = Mathf.Max(0f, donkoSlow - Time.deltaTime * 2f);
         if ((!this.GetComponent<LightDetection>().isLit || drainRate > 0f) && currentLight > 0f) {
             if (!this.GetComponent<LightDetection>().isLit)
                 currentLight = Mathf.Max(currentLight - Time.fixedDeltaTime * 0.5f - drainRate * Time.fixedDeltaTime, 0f);
@@ -74,7 +81,8 @@ public class LightMeter : MonoBehaviour
 
             if (movespeedTween > 0f)
                 movespeedTween = Mathf.Max(movespeedTween - Time.fixedDeltaTime * 2.5f, 0f);
-            this.GetComponent<DonkoController>().speed = Mathf.Lerp(movespeedLit * movespeedUnlit, movespeedLit, movespeedTween);
+            this.GetComponent<DonkoController>().speed = 
+                Mathf.Max(0f, Mathf.Lerp(movespeedLit * movespeedUnlit, movespeedLit, movespeedTween) - donkoSlow);
             this.GetComponent<DonkoController>().jump = 0f;
         }
         else if (this.GetComponent<LightDetection>().isLit && currentLight > 0f && drainRate <= 0f) {
@@ -86,7 +94,8 @@ public class LightMeter : MonoBehaviour
 
             if (movespeedTween < 1f)
                 movespeedTween = Mathf.Min(movespeedTween + Time.fixedDeltaTime * 2.5f, 1f);
-            this.GetComponent<DonkoController>().speed = Mathf.Lerp(movespeedLit * movespeedUnlit, movespeedLit, movespeedTween);
+            this.GetComponent<DonkoController>().speed = 
+                Mathf.Max(Mathf.Lerp(movespeedLit * movespeedUnlit, movespeedLit, movespeedTween) - donkoSlow, 0f);
             this.GetComponent<DonkoController>().jump = oldJump;
         }
         if (currentLight <= 0f) {

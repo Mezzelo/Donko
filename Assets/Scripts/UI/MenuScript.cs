@@ -4,14 +4,20 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class MenuScript : MonoBehaviour
 {
 
     Transform[] menuObjects;
     Transform[] buttons;
+    // Transform[] menuItems;
+    Vector3[] origPositions;
     float[] buttonRots;
     public AudioClip[] footstepSounds;
+
+    public InputField highscoreName;
 
     bool isTransition = false;
     float fadeTween = 0f;
@@ -26,8 +32,14 @@ public class MenuScript : MonoBehaviour
     }
 
     public void toggleMenus(int menu) {
+        if (currentMenu != -1 && origPositions != null) {
+            for (int i = 0; i < menuObjects[currentMenu].childCount; i++) {
+                 menuObjects[currentMenu].GetChild(i).localPosition = origPositions[i];
+            }
+        }
         currentMenu = menu;
         if (menu != -1) {
+
             for (int i = 0; i < menuObjects.Length; i++) {
                 menuObjects[i].gameObject.SetActive(menu == i);
                 if (menu == i)
@@ -36,9 +48,13 @@ public class MenuScript : MonoBehaviour
 
 
             int numButtons = 0;
-            for (int i = 0; i < menuObjects[currentMenu].childCount; i++) {
-                if (menuObjects[currentMenu].GetChild(i).GetComponent<Button>() != null)
-                    numButtons++;
+            if (menu < menuObjects.Length) {
+                origPositions = new Vector3[menuObjects[currentMenu].childCount];
+                for (int i = 0; i < menuObjects[currentMenu].childCount; i++) {
+                    origPositions[i] = menuObjects[currentMenu].GetChild(i).localPosition;
+                    if (menuObjects[currentMenu].GetChild(i).GetComponent<Button>() != null)
+                        numButtons++;
+                }
             }
 
             buttons = new Transform[numButtons];
@@ -68,14 +84,6 @@ public class MenuScript : MonoBehaviour
         Application.Quit();
     }
 
-    public void setDifficulty(int newDifficulty) {
-        GlobalVars.difficulty = newDifficulty;
-    }
-
-    public void toggleMinimap() {
-        GlobalVars.minimap = !GlobalVars.minimap;
-    }
-
     public void togglePlayerModel() {
         GlobalVars.playerShadow = !GlobalVars.playerShadow;
     }
@@ -86,9 +94,6 @@ public class MenuScript : MonoBehaviour
     }
 
     public void updateOptions() {
-        if (menuObjects[currentMenu].Find("MinimapOption"))
-            menuObjects[currentMenu].Find("MinimapOption").GetComponent<Text>().text =
-                ("Minimap: " + (GlobalVars.minimap ? "ON" : "OFF"));
         if (menuObjects[currentMenu].Find("PlayermodelOption"))
             menuObjects[currentMenu].Find("PlayermodelOption").GetComponent<Text>().text =
                 ("Player model: " + (GlobalVars.playerShadow ? "ON" : "OFF"));
@@ -112,12 +117,43 @@ public class MenuScript : MonoBehaviour
             this.GetComponents<AudioSource>()[1].Play();
             StartCoroutine(LoadGame());
         }
+
+    }
+
+    void updateScoreTable() {
+        for (int i = 0; i < GlobalVars.highScores.Length; i++) {
+            transform.Find("ScoreScreen").GetChild(i + 2).GetComponent<Text>().text =
+                GlobalVars.highScoreNames[i] + " - " + GlobalVars.highScores[i];
+        }
+    }
+
+    public void addNewScore() {
+        GlobalVars.highScores[GlobalVars.newScoreIndex] = GlobalVars.currentScore;
+        GlobalVars.highScoreNames[GlobalVars.newScoreIndex] = highscoreName.text;
+
+        string dataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
+        BinaryFormatter bf = new BinaryFormatter();
+        Directory.CreateDirectory(dataPath + "/ProdForestMushroomEmoji");
+        FileStream file = File.Create(dataPath + "/ProdForestMushroomEmoji/donkodata.dat");
+
+        PlayerData data = new PlayerData();
+        for (int i = 0; i < GlobalVars.highScores.Length; i++) {
+            data.highScores[i] = GlobalVars.highScores[i];
+            data.highScoreNames[i] = GlobalVars.highScoreNames[i];
+        }
+
+        bf.Serialize(file, data);
+        file.Close();
+        updateScoreTable();
+        GlobalVars.currentScore = 0;
+        toggleMenus(5);
     }
 
 
     // Start is called before the first frame update
     void Start()
     {
+        AudioListener.volume = GlobalVars.gameVol / 100f;
         menuObjects = new Transform[transform.childCount - 2];
         for (int i = 1; i < transform.childCount - 1; i++) {
             menuObjects[i - 1] = transform.GetChild(i);
@@ -137,18 +173,101 @@ public class MenuScript : MonoBehaviour
                 this.GetComponents<AudioSource>()[3].Play();
 
         }
+        bool gotHighScore = false;
+        if (GlobalVars.lastLevelCompleted == -1) {
+            GlobalVars.lastLevelCompleted = 0;
+            GlobalVars.highScores[0] = 50;
+            GlobalVars.highScores[1] = 150;
+            GlobalVars.highScores[2] = 250;
+            GlobalVars.highScores[3] = 400;
+            GlobalVars.highScores[4] = 450;
+            GlobalVars.highScoreNames[0] = "Pwease no Steppy";
+            GlobalVars.highScoreNames[1] = "Disco Broccoli";
+            GlobalVars.highScoreNames[2] = "Robert_Cheeto";
+            GlobalVars.highScoreNames[3] = "Matt from Wii Sports";
+            GlobalVars.highScoreNames[4] = "JEX";
+
+            if (!GlobalVars.dataHasLoaded) {
+                GlobalVars.dataHasLoaded = true;
+                string dataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
+                BinaryFormatter bf = new BinaryFormatter();
+                if (File.Exists(dataPath + "/ProdForestMushroomEmoji/donkodata.dat")) {
+                    FileStream file = File.Open(dataPath + "/ProdForestMushroomEmoji/donkodata.dat", FileMode.Open);
+                    PlayerData data;
+                    try {
+                        data = (PlayerData)bf.Deserialize(file);
+                        for (int i = 0; i < GlobalVars.highScores.Length; i++) {
+                            GlobalVars.highScores[i] = data.highScores[i];
+                            GlobalVars.highScoreNames[i] = data.highScoreNames[i];
+                        }
+                    }
+                    catch (EndOfStreamException) {
+                    }
+                    catch (System.Runtime.Serialization.SerializationException) {
+                    }
+                    file.Close();
+                } else {
+                    Directory.CreateDirectory(dataPath + "/ProdForestMushroomEmoji");
+                    FileStream file = File.Create(dataPath + "/ProdForestMushroomEmoji/donkodata.dat");
+
+                    PlayerData data = new PlayerData();
+                    for (int i = 0; i < GlobalVars.highScores.Length; i++) {
+                        data.highScores[i] = GlobalVars.highScores[i];
+                        data.highScoreNames[i] = GlobalVars.highScoreNames[i];
+                    }
+
+                    bf.Serialize(file, data);
+                    file.Close();
+                }
+            }
+        } else if (GlobalVars.lastLevelCompleted >= 1) {
+            Debug.Log("checkScore");
+            for (int i = 4; i > -1; i--) {
+                if (GlobalVars.currentScore > GlobalVars.highScores[i]) {
+                    for (int g = 1; g <= i; g++) {
+                        GlobalVars.highScores[g - 1] = GlobalVars.highScores[g];
+                        GlobalVars.highScoreNames[g - 1] = GlobalVars.highScoreNames[g];
+                    }
+                    GlobalVars.newScoreIndex = i;
+                    toggleMenus(6);
+                    gotHighScore = true;
+                    break;
+                }
+            }
+        }
+        updateScoreTable();
+        GlobalVars.lastLevelCompleted = 0;
+        if (!gotHighScore)
+            GlobalVars.currentScore = 0;
+        GlobalVars.combinedLevelTime = 0f;
+
     }
 
     // Update is called once per frame
     void Update() {
+        /*
+        if (Input.GetKeyDown(KeyCode.P)) {
+            GlobalVars.currentScore = 150;
+            GlobalVars.newScoreIndex = 0;
+            highscoreName.text = "reee";
+            addNewScore();
+
+            updateScoreTable();
+        }*/
         if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Return)) {
             if (EventSystem.current.currentSelectedGameObject == null && currentMenu >= 0) {
                 EventSystem.current.SetSelectedGameObject(menuObjects[currentMenu].GetChild(0).gameObject);
             }
         }
         
+        if (currentMenu > -1 && currentMenu < menuObjects.Length) {
+            for (int i = 0; i < menuObjects[currentMenu].childCount; i++) {
+                menuObjects[currentMenu].GetChild(i).localPosition = origPositions[i] + new Vector3(0f,
+                    Mathf.Sin(Time.time + i * 1.5f) * 10f, 0f);
+            }
+        }
+
         if (buttons.Length > 1 && currentMenu != -1) {
-            
             for (int i = 0; i < buttons.Length; i++) {
                 if (EventSystem.current.currentSelectedGameObject.transform == buttons[i]) {
                     if (buttons[i].rotation.eulerAngles.z > 300f) {
@@ -176,4 +295,10 @@ public class MenuScript : MonoBehaviour
                 isTransition = false;
         }
     }
+}
+
+[System.Serializable]
+class PlayerData {
+    public int[] highScores = { 0, 0, 0, 0, 0 };
+    public string[] highScoreNames = { "", "", "", "", "" };
 }

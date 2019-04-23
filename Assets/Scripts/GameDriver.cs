@@ -22,6 +22,7 @@ public class GameDriver : MonoBehaviour
     public Transform levelEndPoint;
     public float levelEndRadius = 20f;
     public string nextScene;
+    public int levelMaxScore = 150;
 
     float levelTime;
 
@@ -36,12 +37,12 @@ public class GameDriver : MonoBehaviour
         if (levelStatus == 0) {
             levelStatus = 2;
             isTransition = true;
+            GlobalVars.combinedLevelTime += levelTime;
         }
     }
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         Physics.gravity = new Vector3(0f, -13f, 0f);
         AudioListener.volume = 0f;
         Cursor.visible = false;
@@ -51,6 +52,12 @@ public class GameDriver : MonoBehaviour
     // Update is called once per frame
     void Update() {
         levelTime += Time.deltaTime;
+
+        if ((Input.GetKeyDown(KeyCode.O) || Input.GetKeyDown(KeyCode.JoystickButton6)) && !isTransition && isPaused) {
+            isTransition = true;
+            SceneManager.LoadScene("Menu");
+        }
+
         if ((Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.JoystickButton7)) && !isTransition) {
             isPaused = !isPaused;
             Cursor.visible = isPaused;
@@ -69,6 +76,10 @@ public class GameDriver : MonoBehaviour
 
 
         if ((player.position - levelEndPoint.position).magnitude < levelEndRadius && levelStatus == 0) {
+            Debug.Log(GlobalVars.combinedLevelTime);
+            GlobalVars.currentScore += (int)Mathf.Max(0f, levelMaxScore - (levelTime + GlobalVars.combinedLevelTime));
+            Debug.Log(GlobalVars.currentScore);
+            GlobalVars.combinedLevelTime = 0f;
             levelStatus = 1;
             isTransition = true;
             gameObject.GetComponents<AudioSource>()[3].Play();
@@ -89,12 +100,12 @@ public class GameDriver : MonoBehaviour
                     new Color(0.78f, 0.78f, 0.78f), MezzMath.fullSine(Mathf.Min(3.5f, tween) / 3.5f));
             }
             else if (tween < 7f && levelStatus == 1) {
-                Debug.Log(levelTime);
                 tween = tween + Time.deltaTime;
                 transform.Find("Fade").GetComponent<Image>().color = Color.Lerp(Color.clear,
                     Color.black, MezzMath.fullSine(Mathf.Min(3.5f, tween - 3.5f) / 3.5f));
                 AudioListener.volume = 1f - (tween - 3.5f)/3.5f;
                 if (tween >= 7f) {
+                    GlobalVars.lastLevelCompleted++;
                     SceneManager.LoadScene(nextScene);
                 }
             }

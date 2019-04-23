@@ -9,14 +9,20 @@ public class GlobalVars
     public static int startSpawn = 0;
 
     // 0 = normal, 1 = hard
-    public static int difficulty = 0;
+    public static int lastLevelCompleted = -1;
 
-    public static bool minimap = false;
+    public static bool dataHasLoaded = false;
 
     public static bool playerShadow = false;
 
     public static int gameVol = 100;
 
+    public static int currentScore = 0;
+    public static float combinedLevelTime = 0;
+
+    public static int newScoreIndex = 0;
+
     public static bool scoresSetup = false;
-    public static int[] highScores = new int[10];
+    public static string[] highScoreNames = new string[5];
+    public static int[] highScores = new int[5];
 }
