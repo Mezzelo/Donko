@@ -9190,6 +9190,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: cc5f4da4e98cfaa4185169de993a075f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cc5f4da4e98cfaa4185169de993a075f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 314.3
@@ -9252,6 +9256,26 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 419918ea13f65f942a50e429609d4a2a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc5f4da4e98cfaa4185169de993a075f, type: 3}
+--- !u!1 &1295746419 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: cc5f4da4e98cfaa4185169de993a075f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1295746418}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1295746420
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295746419}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300000, guid: cc5f4da4e98cfaa4185169de993a075f, type: 3}
 --- !u!1001 &1296408985
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24577,12 +24601,12 @@ PrefabInstance:
     - target: {fileID: 6383681807954552689, guid: 7cf0d3b8a6f508c4e975aedfdded7dd8,
         type: 3}
       propertyPath: levelEndRadius
-      value: 5.8
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6383681807954552689, guid: 7cf0d3b8a6f508c4e975aedfdded7dd8,
         type: 3}
       propertyPath: levelMaxScore
-      value: 300
+      value: 550
       objectReference: {fileID: 0}
     - target: {fileID: 2049172822, guid: 7cf0d3b8a6f508c4e975aedfdded7dd8, type: 3}
       propertyPath: m_audioClip

@@ -33,7 +33,7 @@ public class MenuScript : MonoBehaviour
 
     public void toggleMenus(int menu) {
         if (currentMenu != -1 && origPositions != null) {
-            for (int i = 0; i < menuObjects[currentMenu].childCount; i++) {
+            for (int i = 0; i < menuObjects[currentMenu].childCount && i < origPositions.Length; i++) {
                  menuObjects[currentMenu].GetChild(i).localPosition = origPositions[i];
             }
         }
@@ -129,7 +129,10 @@ public class MenuScript : MonoBehaviour
 
     public void addNewScore() {
         GlobalVars.highScores[GlobalVars.newScoreIndex] = GlobalVars.currentScore;
-        GlobalVars.highScoreNames[GlobalVars.newScoreIndex] = highscoreName.text;
+        if (highscoreName.text == "")
+            GlobalVars.highScoreNames[GlobalVars.newScoreIndex] = "???";
+        else
+            GlobalVars.highScoreNames[GlobalVars.newScoreIndex] = highscoreName.text;
 
         string dataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
         BinaryFormatter bf = new BinaryFormatter();
@@ -154,25 +157,23 @@ public class MenuScript : MonoBehaviour
     void Start()
     {
         AudioListener.volume = GlobalVars.gameVol / 100f;
+        Time.timeScale = 1f;
         menuObjects = new Transform[transform.childCount - 2];
         for (int i = 1; i < transform.childCount - 1; i++) {
             menuObjects[i - 1] = transform.GetChild(i);
             menuObjects[i - 1].localPosition = Vector3.zero;
         }
-        currentMenu = 4;
         updateOptions();
-        toggleMenus(GlobalVars.menuScreen);
-        currentMenu = GlobalVars.menuScreen;
-        if (GlobalVars.menuScreen != 0) {
+        // if (GlobalVars.menuScreen != 0) {
             isTransition = true;
             fadeTween = 1f;
             transform.Find("Fade").GetComponent<Image>().color = Color.black;
-            if (currentMenu == 1)
-                this.GetComponents<AudioSource>()[2].Play();
-            else if (currentMenu == 2)
-                this.GetComponents<AudioSource>()[3].Play();
+            // if (currentMenu == 1)
+            //     this.GetComponents<AudioSource>()[2].Play();
+            // else if (currentMenu == 2)
+            //     this.GetComponents<AudioSource>()[3].Play();
 
-        }
+        // }
         bool gotHighScore = false;
         if (GlobalVars.lastLevelCompleted == -1) {
             GlobalVars.lastLevelCompleted = 0;
@@ -237,8 +238,10 @@ public class MenuScript : MonoBehaviour
         }
         updateScoreTable();
         GlobalVars.lastLevelCompleted = 0;
-        if (!gotHighScore)
+        if (!gotHighScore) {
             GlobalVars.currentScore = 0;
+            toggleMenus(GlobalVars.menuScreen);
+        }
         GlobalVars.combinedLevelTime = 0f;
 
     }
@@ -260,8 +263,8 @@ public class MenuScript : MonoBehaviour
             }
         }
         
-        if (currentMenu > -1 && currentMenu < menuObjects.Length) {
-            for (int i = 0; i < menuObjects[currentMenu].childCount; i++) {
+        if (currentMenu > -1 && currentMenu < menuObjects.Length && currentMenu != 6) {
+            for (int i = 0; i < menuObjects[currentMenu].childCount && i < origPositions.Length; i++) {
                 menuObjects[currentMenu].GetChild(i).localPosition = origPositions[i] + new Vector3(0f,
                     Mathf.Sin(Time.time + i * 1.5f) * 10f, 0f);
             }

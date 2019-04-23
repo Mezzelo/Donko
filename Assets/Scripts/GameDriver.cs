@@ -68,6 +68,7 @@ public class GameDriver : MonoBehaviour
 
             transform.Find("PauseTitle").GetComponent<Text>().enabled = isPaused;
             transform.Find("PauseText").GetComponent<Text>().enabled = isPaused;
+            transform.Find("PauseText2").GetComponent<Text>().enabled = isPaused;
             transform.Find("PauseGrey").GetComponent<Image>().color = (isPaused ? new Color(0.5f, 0.5f, 0.5f, 0.5f) : Color.clear);
             AudioListener.volume = (isPaused ? 0f : (GlobalVars.gameVol / 100f));
             Time.timeScale = (isPaused ? 0f : 1f);
