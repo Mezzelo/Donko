@@ -53,6 +53,13 @@ public class GameDriver : MonoBehaviour
     void Update() {
         levelTime += Time.deltaTime;
 
+        if (Input.GetKeyDown(KeyCode.R)) {
+            GlobalVars.combinedLevelTime += levelTime;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Application.Quit();
+        }
         if ((Input.GetKeyDown(KeyCode.O) || Input.GetKeyDown(KeyCode.JoystickButton6)) && !isTransition && isPaused) {
             isTransition = true;
             SceneManager.LoadScene("Menu");
@@ -77,9 +84,9 @@ public class GameDriver : MonoBehaviour
 
 
         if ((player.position - levelEndPoint.position).magnitude < levelEndRadius && levelStatus == 0) {
-            Debug.Log(GlobalVars.combinedLevelTime);
+            // Debug.Log(GlobalVars.combinedLevelTime);
             GlobalVars.currentScore += (int)Mathf.Max(0f, levelMaxScore - (levelTime + GlobalVars.combinedLevelTime));
-            Debug.Log(GlobalVars.currentScore);
+            // Debug.Log(GlobalVars.currentScore);
             GlobalVars.combinedLevelTime = 0f;
             levelStatus = 1;
             isTransition = true;

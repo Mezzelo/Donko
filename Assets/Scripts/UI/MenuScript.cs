@@ -156,6 +156,8 @@ public class MenuScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         AudioListener.volume = GlobalVars.gameVol / 100f;
         Time.timeScale = 1f;
         menuObjects = new Transform[transform.childCount - 2];

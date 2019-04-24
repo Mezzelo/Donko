@@ -31,11 +31,5 @@ public class DonkoInteraction : MonoBehaviour
                 }
             }
         }
-        if (Input.GetKeyDown(KeyCode.R)) {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            Application.Quit();
-        }
     }
 }

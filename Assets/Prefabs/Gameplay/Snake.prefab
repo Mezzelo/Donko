@@ -293,7 +293,7 @@ MonoBehaviour:
   attackRange: 2.8
   attackTime: 0.2
   attackCdMax: 1
-  damageRate: 6
+  damageRate: 5
   damageTime: 0.2
 --- !u!136 &7586351952351460200
 CapsuleCollider:
