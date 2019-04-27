@@ -16,6 +16,7 @@ public class GlobalVars
     public static bool playerShadow = false;
 
     public static int gameVol = 100;
+    public static int musicVol = 100;
 
     public static int currentScore = 0;
     public static float combinedLevelTime = 0;

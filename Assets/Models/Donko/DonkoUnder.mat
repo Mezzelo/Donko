@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: DonkoUnder
   m_Shader: {fileID: 4800000, guid: f035bdae365d6a34aa888d8336aa66a9, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: BOOLEAN_D848A12_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -20,11 +20,23 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - Texture2D_3533EDD3:
-        m_Texture: {fileID: 2800000, guid: 1025732556e9f4749984ce03c95fda50, type: 3}
+        m_Texture: {fileID: 2800000, guid: da8008f6950ebd54cbbaf15f7871cb4e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_57078A9F:
         m_Texture: {fileID: 2800000, guid: 9ec0f900bf07a81448ccd38ff5c64187, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_86AD14F0:
+        m_Texture: {fileID: 2800000, guid: da8008f6950ebd54cbbaf15f7871cb4e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_B5411ED1:
+        m_Texture: {fileID: 2800000, guid: 13accf17c755a0546a57d5a9e10453d3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_CA018973:
+        m_Texture: {fileID: 2800000, guid: da8008f6950ebd54cbbaf15f7871cb4e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -53,12 +65,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Boolean_1C3EA72E: 0
+    - Boolean_D848A12: 1
     - Vector1_286ABC04: 0.24
     - Vector1_2EE916AC: 0.4
     - Vector1_4BFF39CE: 0.35
     - Vector1_4E5C3EF6: 0.1
     - Vector1_93DB2A4C: 1.3
     - Vector1_9D3CADBA: 0.04
+    - Vector1_B7C236F4: 1
     - Vector1_BE9A2DFE: 6.8
     - Vector1_F070EF50: 0.65
     - _AlphaClip: 0

@@ -1,39 +1,14 @@
 fileFormatVersion: 2
-guid: 571925f3757437c429cc9fea508e773d
+guid: 0d01761c7807ee941b7f7432ba17c354
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: Armature
-    100002: Bone
-    100004: Bone.001
-    100006: Bone.002
-    100008: Bone.003
-    100010: Bone.004
-    100012: Bone.005
-    100014: Bone.006
-    100016: Bone.007
-    100018: Cube
-    100020: //RootNode
-    400000: Armature
-    400002: Bone
-    400004: Bone.001
-    400006: Bone.002
-    400008: Bone.003
-    400010: Bone.004
-    400012: Bone.005
-    400014: Bone.006
-    400016: Bone.007
-    400018: Cube
-    400020: //RootNode
+    100000: //RootNode
+    400000: //RootNode
     2100000: Material
-    4300000: Cube
-    7400000: Armature|Attack
-    7400002: Armature|Idle
-    7400004: Armature|Idle Random
-    7400006: Armature|Walking
-    9500000: //RootNode
-    13700000: Cube
-    2186277476908879412: ImportLogs
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: SLug
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -65,7 +40,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 30
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -86,8 +61,8 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.01
-    hasPreviousCalculatedGlobalScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -114,7 +89,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

@@ -14,6 +14,7 @@ public class DonkoController : MonoBehaviour {
     float airspeedCurrent = 1f;
 
     public Animator donkoAnims;
+    public Transform capCollision;
 
     public float jumpCooldownMax = 0.4f;
 
@@ -25,13 +26,16 @@ public class DonkoController : MonoBehaviour {
     float attackTimeC = 0f;
     float attackTimeMax = 1.266f;
 
+    Transform gameCam;
+
     public void doDeath() {
         if (isSwinging) {
             transform.GetChild(0).localPosition = new Vector3(0f, transform.GetChild(0).localPosition.y, 0f);
             Destroy(gameObject.GetComponent<FixedJoint>());
             isSwinging = false;
         }
-        transform.GetChild(1).GetComponent<MeshCollider>().enabled = true;
+        capCollision.GetComponent<MeshCollider>().enabled = true;
+        capCollision.GetChild(0).GetComponent<MeshCollider>().enabled = false;
         donkoAnims.SetTrigger("didDie");
         gameObject.GetComponent<AudioSource>().Stop();
     }
@@ -39,12 +43,17 @@ public class DonkoController : MonoBehaviour {
     Vector3 posLastTick;
     Vector3 donkoVeloc;
 
+    public void screenShake(float amount) {
+        gameCam.GetComponent<CameraController>().addShake(amount);
+    }
+
 
     // Use this for initialization
     void Start() {
         rb = GetComponent<Rigidbody>();
         posLastTick = transform.position;
         gameObject.GetComponent<AudioSource>().Play();
+        gameCam = Camera.main.transform;
     }
 
     private void FixedUpdate() {
@@ -82,20 +91,29 @@ public class DonkoController : MonoBehaviour {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        if (attackTimeC > 0f)
+        if (attackTimeC > 0f) {
+            if (attackTimeC > attackTimeMax - 0.2f && attackTimeC - Time.deltaTime < attackTimeMax - 0.2f) {
+                capCollision.GetChild(0).GetComponents<AudioSource>()[0].pitch = Random.Range(0.9f, 1.1f);
+                capCollision.GetChild(0).GetComponents<AudioSource>()[0].Play();
+            }
             attackTimeC = Mathf.Max(0f, attackTimeC - Time.deltaTime);
-        if (Input.GetKeyDown(KeyCode.F) && attackTimeC <= 0f && !isSwinging && isGrounded) {
+            // Debug.Log(attackTimeC + ", " + (attackTimeC > 0.5f && attackTimeC < attackTimeMax - 0.5f));
+            capCollision.GetChild(0).GetComponent<AttackCollision>().setCanAttack(
+                (attackTimeC > 0.5f && attackTimeC < attackTimeMax - 0.4f));
+        }
+        if ((Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown("joystick button 1")) && attackTimeC <= 0f && !isSwinging
+            && airspeedCurrent > airspeedMult + (1f - airspeedMult) / 3f * 2f
+            ) {
             donkoAnims.SetTrigger("didAttack");
+            donkoAnims.SetFloat("doIdle", 0f);
             attackTimeC = attackTimeMax;
-            transform.GetChild(1).GetComponent<MeshCollider>().enabled = true;
         }
 
         // this is our camera
-        var camera = Camera.main;
 
         // these are the forward/right vectors for the camera
-        var forward = camera.transform.forward;
-        var right = camera.transform.right;
+        var forward = gameCam.forward;
+        var right = gameCam.transform.right;
 
         // project hese vectors onto the horizontal plane
         forward.y = 0f;
@@ -118,17 +136,25 @@ public class DonkoController : MonoBehaviour {
                 rb.AddForce(desiredMoveDirection * 650f * Time.deltaTime, ForceMode.Force);
             }
         } else {
-
-
-            var desiredMoveDirection = (forward * vertical + right * horizontal) * airspeedCurrent * (attackTimeC > 0f ? 0f : 1f);
+            float attackMoveMult =
+                (attackTimeC <= 0f ? 1f :
+                (attackTimeC > attackTimeMax - 0.6f ? (attackTimeC - attackTimeMax + 0.6f) / 0.6f * 0.85f + 0.15f :
+                (attackTimeC < 0.5f ? (0.5f - attackTimeC) / 0.5f * 0.85f + 0.15f : 0.15f)));
+            var desiredMoveDirection = (forward * vertical + right * horizontal) * airspeedCurrent * attackMoveMult;
 
             // the actual movement
             if (desiredMoveDirection != Vector3.zero && Time.timeScale > 0f) {
-                transform.GetChild(0).forward = desiredMoveDirection.normalized;
-                transform.Translate(desiredMoveDirection * speed * Time.deltaTime);
+                if (attackMoveMult > 0.25f) {
+                    transform.GetChild(0).forward = Vector3.Lerp(transform.GetChild(0).forward, 
+                        desiredMoveDirection.normalized, 0.25f);
+                }
+                transform.Translate(desiredMoveDirection * speed * Time.deltaTime *
+                    ((1f - (Vector3.Angle(transform.GetChild(0).forward, desiredMoveDirection.normalized)/180f) *
+                    0.5f) * 0.85f + 0.15f));
                 donkoAnims.SetBool("isMoving", true);
-                donkoAnims.SetFloat("walkForwards", vertical);
-                donkoAnims.SetFloat("walkSide", horizontal);
+                donkoAnims.SetFloat("walkForwards",
+                    ((1f - (Vector3.Angle(transform.GetChild(0).forward, desiredMoveDirection.normalized) / 180f) *
+                    0.5f) * 0.85f + 0.15f) * airspeedCurrent);
                 donkoAnims.SetFloat("doIdle", 0f);
                 if (isGrounded)
                     gameObject.GetComponent<AudioSource>().volume = Mathf.Max(-0.8f + airspeedCurrent, 0f);

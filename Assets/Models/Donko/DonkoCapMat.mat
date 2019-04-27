@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: DonkoCapMat
   m_Shader: {fileID: 4800000, guid: f035bdae365d6a34aa888d8336aa66a9, type: 3}
-  m_ShaderKeywords: BOOLEAN_1C3EA72E_ON
+  m_ShaderKeywords: BOOLEAN_1C3EA72E_ON BOOLEAN_D848A12_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -25,6 +25,18 @@ Material:
         m_Offset: {x: 0, y: 0}
     - Texture2D_57078A9F:
         m_Texture: {fileID: 2800000, guid: 89de3eb4342acc448beaa7f8578c741e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_86AD14F0:
+        m_Texture: {fileID: 2800000, guid: a1ac5479a9cad9145a69fc5ce3141889, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_B5411ED1:
+        m_Texture: {fileID: 2800000, guid: 12933afa875b8d74e990e5a2f1971219, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_CA018973:
+        m_Texture: {fileID: 2800000, guid: f7293ea690289f745a471c051eafd022, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -53,6 +65,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Boolean_1C3EA72E: 1
+    - Boolean_D848A12: 1
     - Vector1_286ABC04: 0.24
     - Vector1_2EE916AC: 0.4
     - Vector1_4BFF39CE: 0.35

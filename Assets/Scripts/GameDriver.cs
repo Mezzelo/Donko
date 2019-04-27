@@ -97,9 +97,9 @@ public class GameDriver : MonoBehaviour
             if (tween < 4f && levelStatus == 2) {
                 tween = tween + Time.deltaTime;
                 transform.Find("Fade").GetComponent<Image>().color = Color.Lerp(Color.clear, Color.black, Mathf.Min(3f, tween) / 3f);
-                AudioListener.volume = Mathf.Max(0f, 1f - (tween) / 2f);
+                AudioListener.volume = Mathf.Max(0f, (1f - (tween) / 2f) * (GlobalVars.gameVol / 100f));
                 if (tween >= 4f) {
-                    AudioListener.volume = 1f;
+                    AudioListener.volume = (GlobalVars.gameVol / 100f);
                     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 }
             } else if (tween < 3.5f && levelStatus == 1) {
@@ -111,7 +111,7 @@ public class GameDriver : MonoBehaviour
                 tween = tween + Time.deltaTime;
                 transform.Find("Fade").GetComponent<Image>().color = Color.Lerp(Color.clear,
                     Color.black, MezzMath.fullSine(Mathf.Min(3.5f, tween - 3.5f) / 3.5f));
-                AudioListener.volume = 1f - (tween - 3.5f)/3.5f;
+                AudioListener.volume = (1f - (tween - 3.5f)/3.5f) * (GlobalVars.gameVol / 100f);
                 if (tween >= 7f) {
                     GlobalVars.lastLevelCompleted++;
                     SceneManager.LoadScene(nextScene);
@@ -120,7 +120,7 @@ public class GameDriver : MonoBehaviour
         } else {
             if (tween > 0f) {
                 tween = Mathf.Max(tween - Time.deltaTime, 0f);
-                AudioListener.volume = (1.3f - tween) / 1.3f;
+                AudioListener.volume = ((1.3f - tween) / 1.3f) * (GlobalVars.gameVol / 100f);
                 transform.Find("Fade").GetComponent<Image>().color = Color.Lerp(Color.clear, Color.black, tween);
             }
         }

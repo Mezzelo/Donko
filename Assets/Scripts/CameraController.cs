@@ -23,8 +23,13 @@ public class CameraController : MonoBehaviour {
     public float zoomDistanceMin = 4f;
     public float scrollSpeed = 0.75f;
 
+    float screenShake = 0f;
+
     Vector3 normalPosition;
 
+    public void addShake(float amount) {
+        screenShake += amount;
+    }
 
     // Use this for initialization
     void Start() {
@@ -35,6 +40,9 @@ public class CameraController : MonoBehaviour {
 
     // Update is called once per frame
     void LateUpdate() {
+        if (screenShake > 0f)
+            screenShake = Mathf.Max(0f, screenShake - Time.deltaTime * 2.5f);
+
         // Debug.Log(currY);
         if (Time.timeScale > 0f) {
             float offY = Input.GetAxis("Mouse Y");
@@ -59,6 +67,10 @@ public class CameraController : MonoBehaviour {
         transform.position = normalPosition;
         CameraClose();
         transform.LookAt(player.position);
+        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(
+            Random.Range(-screenShake, screenShake) * 1.5f, 
+            Random.Range(-screenShake, screenShake) * 1.5f, 
+            Random.Range(-screenShake, screenShake) * 1.5f));
     }
 
     void CameraClose() {

@@ -9,7 +9,9 @@ public class KillZone : MonoBehaviour
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.CompareTag("Player")) {
             other.gameObject.GetComponent<LightMeter>().modifyDrainRate(drainRate);
-        }
+        } else if (other.gameObject.CompareTag("Enemy")) {
+            other.gameObject.GetComponent<EnemyBase>().takeDamage(99);
+        } 
     }
 
     void OnTriggerExit(Collider other) {
