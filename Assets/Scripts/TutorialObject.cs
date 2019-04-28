@@ -42,22 +42,26 @@ public class TutorialObject : MonoBehaviour
 
     // Start is called before the first frame update
     void Start() {
-        originalPosition = transform.position;
-        if (startHidden) {
-            gameObject.GetComponent<SpriteRenderer>().color = Color.clear;
-            fadeTween = -1f;
+        if (!GlobalVars.uiEnabled) {
+            GameObject.Destroy(this.gameObject);
+        } else {
+            originalPosition = transform.position;
+            if (startHidden) {
+                gameObject.GetComponent<SpriteRenderer>().color = Color.clear;
+                fadeTween = -1f;
+            }
+            if (player == null) {
+                player = GameObject.Find("Player").transform;
+            }
+            if (thisCamera == null) {
+                thisCamera = GameObject.Find("Main Camera").transform;
+            }
+            if (Input.GetJoystickNames().Length > 0) {
+                gameObject.GetComponent<SpriteRenderer>().sprite = controllerGraphic;
+            }
+            if (disablePosition != null)
+                disablePosition.transform.parent = transform.parent;
         }
-        if (player == null) {
-            player = GameObject.Find("Player").transform;
-        }
-        if (thisCamera == null) {
-            thisCamera = GameObject.Find("Main Camera").transform;
-        }
-        if (Input.GetJoystickNames().Length > 0) {
-            gameObject.GetComponent<SpriteRenderer>().sprite = controllerGraphic;
-        }
-        if (disablePosition != null)
-            disablePosition.transform.parent = transform.parent;
     }
 
     // Update is called once per frame

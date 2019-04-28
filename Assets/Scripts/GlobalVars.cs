@@ -13,7 +13,7 @@ public class GlobalVars
 
     public static bool dataHasLoaded = false;
 
-    public static bool playerShadow = false;
+    public static bool uiEnabled = true;
 
     public static int gameVol = 100;
     public static int musicVol = 100;

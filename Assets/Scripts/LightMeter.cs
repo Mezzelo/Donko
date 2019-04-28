@@ -112,7 +112,9 @@ public class LightMeter : MonoBehaviour
             uiCanvas.GetComponents<AudioSource>()[1].volume = Mathf.Lerp(0f, normalMusicVol * GlobalVars.musicVol / 100f, currentLight / maxLight);
             uiCanvas.GetComponents<AudioSource>()[2].volume = Mathf.Lerp(normalMusicVol * GlobalVars.musicVol / 100f * 3.5f, 0f, currentLight / maxLight);
         }
-        uiCanvas.Find("BarContainer").Find("BarFill").localScale = new Vector3(MezzMath.fullSine(currentLight / maxLight), 1f, 1f);
-        uiCanvas.Find("BarContainer").Find("BarFill").localPosition = new Vector3(125f * MezzMath.fullSine(currentLight / maxLight) - 125f, 0f, 0f);
+        if (GlobalVars.uiEnabled) {
+            uiCanvas.Find("BarContainer").Find("BarFill").localScale = new Vector3(MezzMath.fullSine(currentLight / maxLight), 1f, 1f);
+            uiCanvas.Find("BarContainer").Find("BarFill").localPosition = new Vector3(125f * MezzMath.fullSine(currentLight / maxLight) - 125f, 0f, 0f);
+        }
     }
 }

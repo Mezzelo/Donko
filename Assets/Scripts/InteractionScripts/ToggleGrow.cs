@@ -58,6 +58,9 @@ public class ToggleGrow : ToggleBase
         // if (debug)
         //     Debug.Log(isActivated + ", " + animC);
         if (animC < animTime && isActivated) {
+            if (animC <= animTime / 3f && animC + Time.deltaTime > animTime / 3f && gameObject.GetComponent<ParticleSystem>() != null) {
+                gameObject.GetComponent<ParticleSystem>().Play();
+            }
             animC = Mathf.Min(animC + Time.deltaTime, animTime);
             transform.position = Vector3.Lerp(origPos + posOffsetDeactivated, origPos, MezzMath.fullSine(animC / animTime));
             transform.rotation = Quaternion.Euler(Vector3.Lerp(origRot + rotOffsetDeactivated,
@@ -70,6 +73,9 @@ public class ToggleGrow : ToggleBase
             }
         }
         else if (animC > 0f && !isActivated) {
+            if (animC > animTime / 5f * 4f && animC - Time.deltaTime <= animTime / 5f * 4f && gameObject.GetComponent<ParticleSystem>() != null) {
+                gameObject.GetComponent<ParticleSystem>().Play();
+            }
             animC = Mathf.Max(animC - Time.deltaTime, 0f);
             transform.position = Vector3.Lerp(origPos + posOffsetDeactivated, origPos, MezzMath.fullSine(animC / animTime));
             transform.rotation = Quaternion.Euler(Vector3.Lerp(origRot + rotOffsetDeactivated,

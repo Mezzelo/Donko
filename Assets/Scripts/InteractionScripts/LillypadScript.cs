@@ -20,25 +20,18 @@ public class LillypadScript : ToggleBase
 
     float dir;
 
+
+
     public override void toggleActivation(int mode) {
         base.toggleActivation(mode);
         if (isActivated) {
             gameObject.GetComponent<BoxCollider>().enabled = true;
-            if (gameObject.GetComponent<AudioSource>() != null && mode == 0) {
-                gameObject.GetComponent<AudioSource>().Play();
-            }
             if (mode == 1) {
                 animC = 0.4f - 0.01f;
             }
         }
         else {
             gameObject.GetComponent<BoxCollider>().enabled = false;
-            if (gameObject.GetComponent<AudioSource>() != null && mode == 0) {
-                if (gameObject.GetComponents<AudioSource>().Length > 1)
-                    gameObject.GetComponents<AudioSource>()[1].Play();
-                else
-                    gameObject.GetComponent<AudioSource>().Play();
-            }
             if (mode == 1) {
                 animC = 0.01f;
             }
@@ -58,13 +51,29 @@ public class LillypadScript : ToggleBase
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         if (animC < 1.5f && isActivated) {
             animC = Mathf.Min(animC + Time.deltaTime, 1.5f);
+            if (animC <= 0.55f && animC + Time.deltaTime > 0.55f) {
+                if (gameObject.GetComponent<ParticleSystem>() != null)
+                    gameObject.GetComponent<ParticleSystem>().Play();
+                if (gameObject.GetComponent<AudioSource>() != null) {
+                    gameObject.GetComponent<AudioSource>().Play();
+                }
+            }
         }
         else if (animC > 0f && !isActivated) {
             animC = Mathf.Max(animC - Time.deltaTime, 0f);
+            if (animC > 0.7f && animC - Time.deltaTime <= 0.7f) {
+                if (gameObject.GetComponent<ParticleSystem>() != null)
+                    gameObject.GetComponent<ParticleSystem>().Play();
+                if (gameObject.GetComponent<AudioSource>() != null) {
+                    if (gameObject.GetComponents<AudioSource>().Length > 1)
+                        gameObject.GetComponents<AudioSource>()[1].Play();
+                    else
+                        gameObject.GetComponent<AudioSource>().Play();
+                }
+            }
         }
         transform.position = origPos + new Vector3(0f, Mathf.Sin(Time.time * bobSpeed - startTick + sineOffset) * 0.05f * dir * bobMultiplier, 0f) 
             + new Vector3(0f, -1f * bobMultiplier + 1f * MezzMath.halfSine(animC/ 1.5f) * bobMultiplier, 0f);

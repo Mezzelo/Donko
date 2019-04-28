@@ -17,6 +17,8 @@ public class SlugDriver : EnemyBase
     public float damageRate = 5f;
     public float damageTime = 0.5f;
 
+    public bool canAggro = true;
+
     float moveAccel = 0f;
 
     Vector3 originalPos = Vector3.zero;
@@ -70,7 +72,7 @@ public class SlugDriver : EnemyBase
 
     // Update is called once per frame
     void FixedUpdate() {
-        if (player.GetComponent<DonkoController>().enabled == true && health > 0) {
+        if (player.GetComponent<DonkoController>().enabled == true && health > 0 && canAggro) {
             // 1.5 second delay between gaining and losing aggro.
             if (!isAggro) {
                 if ((player.position - originalPos).magnitude <= aggroRange) {

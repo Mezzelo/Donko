@@ -47,6 +47,11 @@ public class GameDriver : MonoBehaviour
         AudioListener.volume = 0f;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        if (!GlobalVars.uiEnabled) {
+            transform.GetChild(0).gameObject.SetActive(false);
+            transform.GetChild(1).gameObject.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -83,7 +88,9 @@ public class GameDriver : MonoBehaviour
 
 
 
-        if ((player.position - levelEndPoint.position).magnitude < levelEndRadius && levelStatus == 0) {
+        if (((player.position - levelEndPoint.position).magnitude < levelEndRadius
+            || Input.GetKeyDown(KeyCode.K)
+            ) && levelStatus == 0) {
             // Debug.Log(GlobalVars.combinedLevelTime);
             GlobalVars.currentScore += (int)Mathf.Max(0f, levelMaxScore - (levelTime + GlobalVars.combinedLevelTime));
             // Debug.Log(GlobalVars.currentScore);

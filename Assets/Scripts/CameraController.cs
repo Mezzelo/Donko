@@ -64,7 +64,6 @@ public class CameraController : MonoBehaviour {
             offsetY = Quaternion.AngleAxis(offY * turnSpeed, Vector3.right) * offsetY;
         }
         normalPosition = player.position - new Vector3(0, 0, distance) + offsetX + offsetY;
-        transform.position = normalPosition;
         CameraClose();
         transform.LookAt(player.position);
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(
@@ -74,13 +73,17 @@ public class CameraController : MonoBehaviour {
     }
 
     void CameraClose() {
-        Debug.DrawRay(player.position, (transform.position - player.position), Color.green);
-        Ray cameraRay = new Ray(player.position, (transform.position - player.position));
+        Debug.DrawRay(player.position, (normalPosition - player.position), Color.green);
+        Ray cameraRay = new Ray(player.position, (normalPosition - player.position));
         RaycastHit ray;
-        if (Physics.Raycast(cameraRay, out ray, (transform.position - player.position).magnitude, ~(1 << 12))) {
-        if (ray.distance < (transform.position - player.position).magnitude) {
-                transform.position = player.position + (transform.position - player.position).normalized * ray.distance * 0.8f;
+        if (Physics.Raycast(cameraRay, out ray, (normalPosition - player.position).magnitude, ~(1 << 12))) {
+        if (ray.distance < (normalPosition - player.position).magnitude) {
+                transform.position = Vector3.Lerp(transform.position, 
+                    player.position + (normalPosition - player.position).normalized * ray.distance * 0.8f,
+                    0.25f);
             }
+        } else {
+            transform.position = Vector3.Lerp(transform.position, normalPosition, 0.4f);
         }
     }
 

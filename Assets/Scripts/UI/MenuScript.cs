@@ -15,7 +15,6 @@ public class MenuScript : MonoBehaviour
     // Transform[] menuItems;
     Vector3[] origPositions;
     float[] buttonRots;
-    public AudioClip[] footstepSounds;
 
     public InputField highscoreName;
 
@@ -75,8 +74,6 @@ public class MenuScript : MonoBehaviour
     }
 
     public void menuSound(int soundType) {
-        if (soundType == 0)
-            this.GetComponents<AudioSource>()[soundType].clip = footstepSounds[Random.Range(0, footstepSounds.Length)];
         this.GetComponents<AudioSource>()[soundType].Play();
     }
 
@@ -84,8 +81,8 @@ public class MenuScript : MonoBehaviour
         Application.Quit();
     }
 
-    public void togglePlayerModel() {
-        GlobalVars.playerShadow = !GlobalVars.playerShadow;
+    public void toggleUiEnabled() {
+        GlobalVars.uiEnabled = !GlobalVars.uiEnabled;
     }
 
     public void toggleVolume() {
@@ -93,13 +90,22 @@ public class MenuScript : MonoBehaviour
         AudioListener.volume = (GlobalVars.gameVol / 100f);
     }
 
+    public void toggleMusicVolume() {
+        GlobalVars.musicVol = (GlobalVars.musicVol + 10) % 110;
+        AudioListener.volume = (GlobalVars.musicVol / 100f);
+        GameObject.Find("Camera").GetComponent<AudioSource>().volume = 0.15f * (GlobalVars.musicVol / 100f);
+    }
+
     public void updateOptions() {
-        if (menuObjects[currentMenu].Find("PlayermodelOption"))
-            menuObjects[currentMenu].Find("PlayermodelOption").GetComponent<Text>().text =
-                ("Player model: " + (GlobalVars.playerShadow ? "ON" : "OFF"));
-        if (menuObjects[currentMenu].Find("VolumeOption"))
-            menuObjects[currentMenu].Find("VolumeOption").GetComponent<Text>().text =
-                ("Volume: " + GlobalVars.gameVol);
+        if (menuObjects[4].Find("UIOption"))
+            menuObjects[4].Find("UIOption").GetComponent<Text>().text =
+                ("USER INTERFACE: " + (GlobalVars.uiEnabled ? "ON" : "OFF"));
+        if (menuObjects[4].Find("VolumeOption"))
+            menuObjects[4].Find("VolumeOption").GetComponent<Text>().text =
+                ("Master Volume: " + GlobalVars.gameVol);
+        if (menuObjects[4].Find("MusicOption"))
+            menuObjects[4].Find("MusicOption").GetComponent<Text>().text =
+                ("Music Volume: " + GlobalVars.musicVol);
     }
 
     public void setOptionText(string newText) {

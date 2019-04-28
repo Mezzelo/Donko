@@ -85,11 +85,15 @@ public class DonkoController : MonoBehaviour {
     }
     // Update is called once per frame
     void Update() {
-        if (Mathf.Abs(rb.velocity.y) > 0.1f)
-            isGrounded = false;
+        // if (Mathf.Abs(rb.velocity.y) > 0.1f)
+        //     isGrounded = false;
         // get the movement axes for the player
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
+
+
+        GroundCheck();
+        // Debug.Log(isGrounded + ", " + airspeedCurrent);
 
         if (attackTimeC > 0f) {
             if (attackTimeC > attackTimeMax - 0.2f && attackTimeC - Time.deltaTime < attackTimeMax - 0.2f) {
@@ -138,8 +142,8 @@ public class DonkoController : MonoBehaviour {
         } else {
             float attackMoveMult =
                 (attackTimeC <= 0f ? 1f :
-                (attackTimeC > attackTimeMax - 0.6f ? (attackTimeC - attackTimeMax + 0.6f) / 0.6f * 0.85f + 0.15f :
-                (attackTimeC < 0.5f ? (0.5f - attackTimeC) / 0.5f * 0.85f + 0.15f : 0.15f)));
+                (attackTimeC > attackTimeMax - 0.6f ? (attackTimeC - attackTimeMax + 0.6f) / 0.6f * 0.75f + 0.25f :
+                (attackTimeC < 0.5f ? (0.5f - attackTimeC) / 0.5f * 0.75f + 0.25f : 0.25f)));
             var desiredMoveDirection = (forward * vertical + right * horizontal) * airspeedCurrent * attackMoveMult;
 
             // the actual movement
@@ -157,9 +161,9 @@ public class DonkoController : MonoBehaviour {
                     0.5f) * 0.85f + 0.15f) * airspeedCurrent);
                 donkoAnims.SetFloat("doIdle", 0f);
                 if (isGrounded)
-                    gameObject.GetComponent<AudioSource>().volume = Mathf.Max(-0.8f + airspeedCurrent, 0f);
+                    gameObject.GetComponent<AudioSource>().volume = Mathf.Max(-0.8f + airspeedCurrent, 0f) * attackMoveMult;
                 else
-                    gameObject.GetComponent<AudioSource>().volume = Mathf.Max(-0.8f + airspeedCurrent, 0f);
+                    gameObject.GetComponent<AudioSource>().volume = Mathf.Max(-0.8f + airspeedCurrent, 0f) * attackMoveMult;
                 // donkoAnims.speed = donkoVeloc / 0.05f;
             }
             else {
@@ -178,7 +182,6 @@ public class DonkoController : MonoBehaviour {
 
 
         // jump handler
-        GroundCheck();
         if (jumpCooldownC > 0f) {
             donkoAnims.SetBool("jumpFrame", jumpCooldownC > jumpCooldownMax - 0.05f);
             jumpCooldownC = Mathf.Max(0f, jumpCooldownC - Time.deltaTime);
