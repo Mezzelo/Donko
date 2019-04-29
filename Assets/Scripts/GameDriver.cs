@@ -33,6 +33,14 @@ public class GameDriver : MonoBehaviour
         }
     }
 
+    public void endLevel() {
+        GlobalVars.currentScore += (int)Mathf.Max(0f, levelMaxScore - (levelTime + GlobalVars.combinedLevelTime));
+        GlobalVars.combinedLevelTime = 0f;
+        levelStatus = 1;
+        isTransition = true;
+        gameObject.GetComponents<AudioSource>()[3].Play();
+    }
+
     public void gameOver() {
         if (levelStatus == 0) {
             levelStatus = 2;
@@ -50,7 +58,6 @@ public class GameDriver : MonoBehaviour
 
         if (!GlobalVars.uiEnabled) {
             transform.GetChild(0).gameObject.SetActive(false);
-            transform.GetChild(1).gameObject.SetActive(false);
         }
     }
 

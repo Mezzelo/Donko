@@ -66,6 +66,7 @@ public class SlugDriver : EnemyBase
     // Start is called before the first frame update
     void Start() {
         slugAnims = transform.GetChild(0).GetChild(0).GetComponent<Animator>();
+        slugAnims.SetFloat("doIdle", Random.Range(0f, 8f));
         if (player == null)
             player = GameObject.Find("Player").transform;
     }
@@ -127,7 +128,7 @@ public class SlugDriver : EnemyBase
 
         // Debug.Log(desiredMoveDirection.magnitude);
 
-        if (attackCd > 0f) {
+        if (attackCd > 0f && health > 0) {
             if (attackCd >= attackCdMax && attackCd - Time.fixedDeltaTime < attackCdMax) {
                 if ((player.position - transform.position).magnitude < attackRange * 1.2f) {
                     player.GetComponent<LightMeter>().modifyDrainRate(damageRate);
@@ -152,11 +153,13 @@ public class SlugDriver : EnemyBase
                         0.06f
                 );
                 slugAnims.SetBool("isMoving", false);
+                slugAnims.SetFloat("doIdle", 0f);
             } else {
                 if (desiredMoveDirection != null && desiredMoveDirection != Vector3.zero && (originalPos - transform.position).magnitude > 0.2f &&
                     originalPos != Vector3.zero) {
                     transform.Translate(desiredMoveDirection * moveSpeed * Time.fixedDeltaTime);
                     slugAnims.SetBool("isMoving", true);
+                    slugAnims.SetFloat("doIdle", 0f);
                     slugAnims.SetFloat("walkForwards", desiredMoveDirection.magnitude / moveSpeed);
                     gameObject.GetComponent<AudioSource>().volume = desiredMoveDirection.magnitude / moveSpeed * 1.35f;
                     transform.GetChild(0).rotation = Quaternion.Lerp(transform.GetChild(0).rotation,
@@ -169,6 +172,7 @@ public class SlugDriver : EnemyBase
                 else {
                     slugAnims.SetBool("isMoving", false);
                     gameObject.GetComponent<AudioSource>().volume = 0f;
+                    slugAnims.SetFloat("doIdle", Mathf.Repeat(slugAnims.GetFloat("doIdle") + Time.deltaTime, 12f));
                 }
             }
         } else if (isAggro && health > 0) {
@@ -177,6 +181,7 @@ public class SlugDriver : EnemyBase
                         new Vector3(player.position.x - transform.position.x, (player.position.y - transform.position.y) / 7f, player.position.z - transform.position.z)),
                         0.06f
                 );
+            slugAnims.SetFloat("doIdle", 0f);
             if ((player.position - transform.position).magnitude < attackRange && attackCd <= 0f) {
                 // attack the player
                 attackCd = attackCdMax + attackTime;

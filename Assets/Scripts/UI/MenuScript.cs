@@ -20,6 +20,8 @@ public class MenuScript : MonoBehaviour
 
     bool isTransition = false;
     float fadeTween = 0f;
+    float panelTween = 0f;
+    int currentPanel = -1;
     int currentMenu = 0;
 
     IEnumerator LoadGame() {
@@ -81,6 +83,13 @@ public class MenuScript : MonoBehaviour
         Application.Quit();
     }
 
+    public void setPanelFade(int panel) {
+        if (currentPanel > -1)
+            menuObjects[currentMenu].GetChild(currentPanel).GetComponent<Image>().color = Color.white;
+        panelTween = 0f;
+        currentPanel = panel;
+    }
+
     public void toggleUiEnabled() {
         GlobalVars.uiEnabled = !GlobalVars.uiEnabled;
     }
@@ -118,8 +127,8 @@ public class MenuScript : MonoBehaviour
     public void startGame() {
         if (!isTransition) {
             isTransition = true;
-            fadeTween = 0f;
-            transform.Find("Fade").GetComponent<Image>().color = Color.black;
+            fadeTween = -2f;
+            transform.Find("Fade").GetComponent<Image>().color = Color.clear;
             this.GetComponents<AudioSource>()[1].Play();
             StartCoroutine(LoadGame());
         }
@@ -189,8 +198,8 @@ public class MenuScript : MonoBehaviour
             GlobalVars.highScores[1] = 150;
             GlobalVars.highScores[2] = 250;
             GlobalVars.highScores[3] = 400;
-            GlobalVars.highScores[4] = 450;
-            GlobalVars.highScoreNames[0] = "Pwease no Steppy";
+            GlobalVars.highScores[4] = 650;
+            GlobalVars.highScoreNames[0] = "Roomba with a knife";
             GlobalVars.highScoreNames[1] = "Disco Broccoli";
             GlobalVars.highScoreNames[2] = "Robert_Cheeto";
             GlobalVars.highScoreNames[3] = "Matt from Wii Sports";
@@ -238,18 +247,21 @@ public class MenuScript : MonoBehaviour
                         GlobalVars.highScoreNames[g - 1] = GlobalVars.highScoreNames[g];
                     }
                     GlobalVars.newScoreIndex = i;
-                    toggleMenus(6);
+                    toggleMenus(10);
                     gotHighScore = true;
                     break;
                 }
             }
         }
         updateScoreTable();
-        GlobalVars.lastLevelCompleted = 0;
         if (!gotHighScore) {
             GlobalVars.currentScore = 0;
-            toggleMenus(GlobalVars.menuScreen);
+            if (GlobalVars.lastLevelCompleted == 3)
+                toggleMenus(9);
+            else
+                toggleMenus(GlobalVars.menuScreen);
         }
+        GlobalVars.lastLevelCompleted = 0;
         GlobalVars.combinedLevelTime = 0f;
 
     }
@@ -304,6 +316,14 @@ public class MenuScript : MonoBehaviour
             transform.Find("Fade").GetComponent<Image>().color = Color.Lerp(Color.clear, Color.black, fadeTween);
             if (fadeTween == 0f)
                 isTransition = false;
+        } else if (fadeTween < -1f) {
+            fadeTween = Mathf.Min(-1f, fadeTween + Time.deltaTime);
+            transform.Find("Fade").GetComponent<Image>().color = Color.Lerp(Color.clear, Color.black, 2f + fadeTween);
+        }
+        if (currentPanel > -1 && panelTween < 1f && currentMenu > -1) {
+            panelTween = Mathf.Min(1f, panelTween + Time.deltaTime);
+            menuObjects[currentMenu].GetChild(currentPanel).GetComponent<Image>().color =
+                Color.Lerp(new Color(0f, 0f, 0f), Color.white, panelTween);
         }
     }
 }

@@ -27,6 +27,18 @@ public class LightMeter : MonoBehaviour
 
     float donkoSlow = 0f;
 
+    Transform donkoDeco;
+
+    Vector3 barPosI;
+
+    Vector3 donkoLeftPosI;
+    Vector3 donkoLeftHandI;
+
+    Vector3 donkoRightPosI;
+    Vector3 donkoRightHandI;
+
+
+
     public void doDeath() {
         if (currentLight > 0f) {
             this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
@@ -55,6 +67,13 @@ public class LightMeter : MonoBehaviour
 
         uiCanvas.GetComponent<PostProcessVolume>().profile.TryGetSettings(out postVignette);
         vignetteNormal = postVignette.intensity.value;
+
+        donkoDeco = uiCanvas.Find("BarParent").Find("DonkoDeco");
+        barPosI = uiCanvas.Find("BarParent").localPosition;
+        donkoLeftHandI = donkoDeco.Find("DonkoLeftHand").localPosition;
+        donkoLeftPosI = donkoDeco.Find("DonkoLeft").GetChild(0).localPosition;
+        donkoRightHandI = donkoDeco.Find("DonkoRightHand").localPosition;
+        donkoRightPosI = donkoDeco.Find("DonkoRight").GetChild(0).localPosition;
 
 
         if (uiCanvas.GetComponents<AudioSource>().Length > 1) {
@@ -113,8 +132,28 @@ public class LightMeter : MonoBehaviour
             uiCanvas.GetComponents<AudioSource>()[2].volume = Mathf.Lerp(normalMusicVol * GlobalVars.musicVol / 100f * 3.5f, 0f, currentLight / maxLight);
         }
         if (GlobalVars.uiEnabled) {
-            uiCanvas.Find("BarContainer").Find("BarFill").localScale = new Vector3(MezzMath.fullSine(currentLight / maxLight), 1f, 1f);
-            uiCanvas.Find("BarContainer").Find("BarFill").localPosition = new Vector3(125f * MezzMath.fullSine(currentLight / maxLight) - 125f, 0f, 0f);
+            uiCanvas.Find("BarParent").localPosition = barPosI + new Vector3(0f, 1.5f * Mathf.Cos(Time.time * 2.3f + 4.5f), 0f);
+            uiCanvas.Find("BarParent").localRotation = Quaternion.Euler(0f, 0f, 1.3f * Mathf.Cos(Time.time * 1.5f + 4.5f));
+            uiCanvas.Find("BarParent").Find("BarContainer").Find("BarFill").localScale = new Vector3(MezzMath.fullSine(currentLight / maxLight), 1f, 1f);
+            uiCanvas.Find("BarParent").Find("BarContainer").Find("BarFill").localPosition = new Vector3(125f * MezzMath.fullSine(currentLight / maxLight) - 125f, 0f, 0f);
+
+            donkoDeco.Find("DonkoLeft").GetChild(0).localPosition = donkoLeftPosI + ((new Vector3(-5f, -1.5f, 0f) 
+                + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f))) 
+                * MezzMath.fullSine(1f - currentLight / maxLight))
+                + new Vector3(0.3f, 0.5f * Mathf.Sin(Time.time * 2.5f + 6f), 0f);
+            donkoDeco.Find("DonkoLeft").GetChild(0).localRotation = Quaternion.Euler(0f, 0f, -20f * MezzMath.fullSine(1f - currentLight / maxLight));
+
+            donkoDeco.Find("DonkoLeftHand").localPosition = donkoLeftHandI + new Vector3(Random.Range(-0.35f, 0.35f), Random.Range(-0.35f, 0.35f), Random.Range(-0.35f, 0.35f)) * MezzMath.fullSine(1f - currentLight / maxLight);
+
+            donkoDeco.Find("DonkoRight").GetChild(0).localPosition = donkoRightPosI + new Vector3(-5f, -3f, 0f) * MezzMath.fullSine(1f - currentLight / maxLight) + new Vector3(0f, 0.85f * Mathf.Sin(Time.time * 2.5f + 10f), 0f);
+            donkoDeco.Find("DonkoRightArm").GetChild(0).localPosition = donkoRightPosI + new Vector3(-5f, -3f, 0f) * MezzMath.fullSine(1f - currentLight / maxLight) + new Vector3(0f, 0.85f * Mathf.Sin(Time.time * 2.5f + 10f), 0f);
+            donkoDeco.Find("DonkoRightHand").localPosition = donkoRightHandI + new Vector3(3f, 0f, 0f) * MezzMath.fullSine(1f - currentLight / maxLight);
+            donkoDeco.Find("DonkoRightHand").localRotation = Quaternion.Euler(0f, 0f, 15f * MezzMath.fullSine(1f - currentLight / maxLight));
+            donkoDeco.Find("DonkoRight").GetChild(0).rotation = Quaternion.Lerp(Quaternion.identity, Quaternion.Euler(0f, 0f, -15f), MezzMath.fullSine(1f - currentLight / maxLight));
+            donkoDeco.Find("DonkoRightArm").GetChild(0).rotation = Quaternion.Lerp(Quaternion.identity, Quaternion.Euler(0f, 0f, -15f), MezzMath.fullSine(1f - currentLight / maxLight));
+            donkoDeco.Find("DonkoRightArm").GetChild(0).GetChild(0).rotation = Quaternion.Euler(0f, 0f, 30f * MezzMath.fullSine(currentLight / maxLight) * Mathf.Sin(Time.time * 1.75f));
         }
+
+
     }
 }

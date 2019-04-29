@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SlugKingDriver : EnemyBase {
     public Transform player;
-    public float aggroRange = 50f;
     public float moveSpeed = 1f;
     public Transform[] wave1Snails;
     public Transform[] wave2Snails;
@@ -15,9 +14,9 @@ public class SlugKingDriver : EnemyBase {
 
     float damageCd = 1f;
 
-    float attackCd = 0f;
+    // float attackCd = 0f;
 
-    float moveAccel = 0f;
+    // float moveAccel = 0f;
 
     Vector3 originalPos = Vector3.zero;
     Vector3 pos2;
@@ -25,17 +24,12 @@ public class SlugKingDriver : EnemyBase {
 
     Vector3 cTargPos = Vector3.zero;
 
-    float aggroTime = 0f;
+    // float aggroTime = 0f;
 
-    bool isAggro = false;
-    bool isGrounded = true;
+    // bool isAggro = false;
+    // bool isGrounded = true;
 
     Animator slugAnims;
-
-    void OnDrawGizmosSelected() {
-        Gizmos.color = new Color(1f, 1f, 0.4f, 0.3f);
-        Gizmos.DrawWireSphere(transform.position, aggroRange);
-    }
 
     public override void takeDamage(int damageTaken) {
         // Debug.Log(health);
@@ -71,6 +65,7 @@ public class SlugKingDriver : EnemyBase {
                 slugAnims.SetTrigger("doDie");
                 gameObject.GetComponent<AudioSource>().volume = 0f;
                 gameObject.GetComponents<AudioSource>()[3].Play();
+                GameObject.Find("Canvas").GetComponent<GameDriver>().endLevel();
             }
         }
     }

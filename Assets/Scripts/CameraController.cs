@@ -76,15 +76,20 @@ public class CameraController : MonoBehaviour {
         Debug.DrawRay(player.position, (normalPosition - player.position), Color.green);
         Ray cameraRay = new Ray(player.position, (normalPosition - player.position));
         RaycastHit ray;
+        Vector3 xyPos;
         if (Physics.Raycast(cameraRay, out ray, (normalPosition - player.position).magnitude, ~(1 << 12))) {
-        if (ray.distance < (normalPosition - player.position).magnitude) {
-                transform.position = Vector3.Lerp(transform.position, 
+            if (ray.distance < (normalPosition - player.position).magnitude) {
+                xyPos = Vector3.Lerp(transform.position,
                     player.position + (normalPosition - player.position).normalized * ray.distance * 0.8f,
                     0.25f);
             }
+            else {
+                xyPos = Vector3.Lerp(transform.position, normalPosition, 0.4f);
+            }
         } else {
-            transform.position = Vector3.Lerp(transform.position, normalPosition, 0.4f);
+            xyPos = Vector3.Lerp(transform.position, normalPosition, 0.4f);
         }
+        transform.position = Vector3.Lerp(xyPos, new Vector3(xyPos.x, normalPosition.y, xyPos.z), 0.8f);
     }
 
     private void Update() {
