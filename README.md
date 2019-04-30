@@ -1,5 +1,5 @@
 # Donko
-production assignment, 1.5 month dev cycle.  suffering involved
+production assignment, 1.5 month dev cycle.  suffering involved.  build available at https://zoruakev.itch.io/donko
 
 Some notes about the code:
 - player controller uses a rigidbody.  would have preferred a charactercontroller but it works decently for adding knockback.
