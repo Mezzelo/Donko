@@ -84,12 +84,12 @@ public class CameraController : MonoBehaviour {
                     0.25f);
             }
             else {
-                xyPos = Vector3.Lerp(transform.position, normalPosition, 0.4f);
+                xyPos = Vector3.Lerp(new Vector3(transform.position.x, normalPosition.y, transform.position.z), normalPosition, 0.6f);
             }
         } else {
-            xyPos = Vector3.Lerp(transform.position, normalPosition, 0.4f);
+            xyPos = Vector3.Lerp(new Vector3(transform.position.x, normalPosition.y, transform.position.z), normalPosition, 0.6f);
         }
-        transform.position = Vector3.Lerp(xyPos, new Vector3(xyPos.x, normalPosition.y, xyPos.z), 0.8f);
+        transform.position = Vector3.Lerp(new Vector3(transform.position.x, xyPos.y, transform.position.z), new Vector3(xyPos.x, xyPos.y, xyPos.z), 0.9f);
     }
 
     private void Update() {
